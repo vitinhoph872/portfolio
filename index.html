@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vitim Studio — Soluções Web & Defesa Digital</title>
+    <title id="site-browser-title">Vitim Studio — Soluções Web & Defesa Digital</title>
     
-    <!-- Tailwind CSS para design de alta performance -->
+    <!-- Tailwind CSS para design responsivo de alta velocidade -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Fontes Premium de alta legibilidade -->
@@ -25,204 +25,282 @@
                         mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        brandDark: '#020617', // Azul ultra-escuro de altíssima elegância
-                        brandCard: '#0f172a', // Contraste suave para cards
-                        brandAccent: '#06b6d4', // Ciano vivo cibersegurança
-                        brandGreen: '#10b981', // Verde esmeralda sucesso
-                        brandRed: '#ef4444', // Vermelho defesa
+                        brandDark: '#030712', // Ultra escuro elegante
+                        brandCard: '#0f172a', // Contraste suave para blocos
+                        brandBorder: '#1e293b' // Bordas discretas
                     }
                 }
             }
         }
     </script>
 
-    <style>
+    <!-- ESTILOS DO TEMA DINÂMICO (Atualizados via Javascript) -->
+    <style id="dynamic-theme">
+        :root {
+            --accent: #06b6d4;
+            --accent-hover: #0891b2;
+            --accent-glow: rgba(6, 182, 212, 0.15);
+            --bg-style: #020617;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #020617;
+            background: var(--bg-style);
             scroll-behavior: smooth;
         }
-        /* Custom scrollbar minimalista para não consumir memória */
+
+        .bg-accent { background-color: var(--accent) !important; }
+        .text-accent { color: var(--accent) !important; }
+        .border-accent { border-color: var(--accent) !important; }
+        .hover\:bg-accent:hover { background-color: var(--accent-hover) !important; }
+        .hover\:text-accent:hover { color: var(--accent-hover) !important; }
+        .focus\:border-accent:focus { border-color: var(--accent) !important; }
+        .accent-glow { box-shadow: 0 0 25px var(--accent-glow); }
+        
+        /* Custom scrollbar para rodar liso em PC de 2GB */
         ::-webkit-scrollbar {
             width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #020617;
+            background: #030712;
         }
         ::-webkit-scrollbar-thumb {
             background: #1e293b;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #06b6d4;
+            background: var(--accent);
         }
     </style>
 </head>
-<body class="text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-300">
+<body class="text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-300 min-h-screen flex flex-col justify-between">
 
-    <!-- ALERTA DE ATIVAÇÃO DO FIREWALL (WAF DETECTOR) -->
-    <div id="firewall-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[200] w-[90%] max-w-lg bg-red-950/95 border-2 border-red-500 text-red-200 p-5 rounded-2xl shadow-2xl backdrop-blur-md animate-bounce">
+    <!-- ALERTA DO FIREWALL (WAF DETECTOR) -->
+    <div id="firewall-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[250] w-[90%] max-w-lg bg-red-950/95 border-2 border-red-500 text-red-200 p-5 rounded-2xl shadow-2xl backdrop-blur-md animate-bounce">
         <div class="flex items-start gap-3.5">
-            <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30 animate-pulse">
-                <i class="fa-solid fa-shield-virus text-2xl"></i>
+            <div class="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30">
+                <i class="fa-solid fa-shield-virus text-2xl animate-pulse"></i>
             </div>
             <div>
                 <h4 class="font-mono text-xs font-bold text-red-400 uppercase tracking-wider">FIREWALL VITIM DEVSEC (WAF Active)</h4>
                 <p class="text-xs mt-1 text-slate-300 leading-relaxed">
-                    Ação suspeita bloqueada! Tentativa de injeção de script nocivo detectada no campo: <span id="waf-attack-type" class="text-red-400 font-mono font-bold">SQL Injection/XSS</span>.
+                    Ação maliciosa barrada! Tentativa de injeção de script detectada em: <span id="waf-attack-type" class="text-red-400 font-mono font-bold">Injeção detectada</span>.
                 </p>
                 <div class="mt-3 text-[10px] font-mono bg-black/50 p-2 rounded border border-red-500/20">
-                    Origem: Input Sanitized & Logged. Sistema intacto.
+                    Origem: Input Sanitized & Logged. Sistema seguro.
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TOAST DE NOTIFICAÇÃO DO SISTEMA -->
-    <div id="sys-toast" class="hidden fixed bottom-6 right-6 z-[200] bg-slate-900 border border-cyan-500/30 text-cyan-400 px-5 py-3.5 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2.5">
-        <i class="fa-solid fa-circle-nodes text-cyan-400 animate-spin"></i>
-        <span id="sys-toast-text">Sincronizando dados...</span>
+    <!-- TOAST DE SISTEMA -->
+    <div id="sys-toast" class="hidden fixed bottom-20 sm:bottom-6 right-6 z-[250] bg-slate-900 border border-slate-800 text-slate-200 px-5 py-3.5 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2.5">
+        <span class="h-2 w-2 rounded-full bg-accent animate-ping"></span>
+        <span id="sys-toast-text">Ação executada</span>
     </div>
 
-    <!-- MODAL DE AUTENTICAÇÃO SECRETO -->
-    <div id="login-modal" class="hidden fixed inset-0 z-[150] bg-brandDark/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-brandCard border border-slate-800 p-8 rounded-2xl shadow-2xl">
-            <div class="flex justify-between items-start mb-6">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-user-shield text-cyan-400 text-xl"></i>
-                    <h3 class="font-mono text-xs font-bold text-slate-200 tracking-wider uppercase">Portal de Validação</h3>
+    <!-- MODAL DE LOGIN COM TERMOS DE PRIVACIDADE (LGPD) -->
+    <div id="login-modal" class="hidden fixed inset-0 z-[200] bg-brandDark/90 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-brandCard border border-brandBorder p-8 rounded-3xl shadow-2xl relative">
+            <button onclick="fecharModalLogin()" class="absolute top-5 right-5 text-slate-500 hover:text-slate-300 transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-accent flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-lock text-xl"></i>
                 </div>
-                <button onclick="fecharModalLogin()" class="text-slate-500 hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-lg text-slate-100">Área Administrativa</h3>
+                <p class="text-xs text-slate-400 mt-1">Insira suas credenciais para gerenciar a plataforma.</p>
             </div>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Usuário</label>
-                    <input type="text" id="admin-user-inp" placeholder="Digite seu nome de usuário" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2.5 px-3 text-xs text-slate-250 focus:outline-none focus:border-cyan-500 font-mono transition-all">
+                    <input type="text" id="admin-user-inp" placeholder="Digite seu usuário" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 focus:outline-none focus:border-accent font-mono transition-all">
                 </div>
                 <div>
                     <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Chave de Segurança</label>
-                    <input type="password" id="admin-pass-inp" placeholder="Sua senha secreta" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2.5 px-3 text-xs text-slate-250 focus:outline-none focus:border-cyan-500 font-mono transition-all">
+                    <input type="password" id="admin-pass-inp" placeholder="Digite sua senha" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 focus:outline-none focus:border-accent font-mono transition-all">
                 </div>
 
-                <!-- Mensagem de erro -->
-                <div id="admin-error-msg" class="hidden text-red-400 font-mono text-[10px] bg-red-950/40 p-2.5 rounded border border-red-900/30">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Credenciais inválidas ou acesso não autorizado.
+                <!-- Termos de Aceite LGPD -->
+                <div class="bg-brandDark/50 p-3 rounded-xl border border-brandBorder">
+                    <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                        <input type="checkbox" id="lgpd-check" class="mt-0.5 rounded text-cyan-500 bg-brandDark border-brandBorder focus:ring-0">
+                        <span class="text-[10px] text-slate-400 leading-relaxed">
+                            Li e aceito os <strong>Termos de Uso</strong> e <strong>Políticas de Privacidade (LGPD)</strong>. Autorizo o processamento temporário de credenciais de login.
+                        </span>
+                    </label>
                 </div>
 
-                <button onclick="processarLoginAdmin()" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-brandDark font-extrabold text-xs tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-2">
+                <!-- Erro de login -->
+                <div id="admin-error-msg" class="hidden text-red-400 font-mono text-[10px] bg-red-950/40 p-3 rounded-xl border border-red-900/30">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Credenciais inválidas ou termos não aceitos.
+                </div>
+
+                <button onclick="processarLoginAdmin()" class="w-full py-3.5 bg-accent hover:bg-accent text-brandDark font-extrabold text-xs tracking-wider uppercase rounded-xl transition-all flex items-center justify-center gap-2">
                     <i class="fa-solid fa-key"></i> Autenticar Acesso
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- BARRA DE NAVEGAÇÃO -->
-    <header class="fixed top-0 left-0 w-full bg-brandDark/80 backdrop-blur-md border-b border-slate-800/60 z-50 transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2.5 group">
-                <span class="font-mono text-[10px] bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-0.5 rounded font-bold">VITIM</span>
-                <span class="text-sm font-extrabold tracking-tight text-slate-200">STUDIO</span>
+    <!-- MENU DE TRÊS PONTOS (Opções Rápidas) -->
+    <div id="more-menu" class="hidden fixed top-20 right-6 z-[100] w-64 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-md p-4 animate-fade-in">
+        <h4 class="text-[10px] font-mono text-slate-500 uppercase mb-3 tracking-wider">Ações do Sistema</h4>
+        <div class="space-y-1">
+            <button onclick="simularAtaqueFirewall()" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center justify-between text-red-400 transition-colors">
+                <span><i class="fa-solid fa-bug mr-2 text-red-400"></i>Testar Firewall WAF</span>
+                <span class="text-[9px] font-mono bg-red-950 px-1.5 py-0.5 rounded border border-red-800/40">Demo</span>
+            </button>
+            <button onclick="abrirModalLogin()" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center gap-2 text-slate-300 transition-colors">
+                <i class="fa-solid fa-user-shield text-slate-400"></i>Área Privada (Admin)
+            </button>
+            <div class="border-t border-slate-800 my-2 pt-2 text-[10px] font-mono text-slate-500 space-y-1">
+                <div class="flex justify-between px-3">
+                    <span>Firewall Status</span>
+                    <span class="text-emerald-400 font-bold">Ativo</span>
+                </div>
+                <div class="flex justify-between px-3">
+                    <span>Servidor Status</span>
+                    <span class="text-emerald-400 font-bold">Vitim Online</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO DESKTOP -->
+    <header class="fixed top-0 left-0 w-full bg-brandDark/85 backdrop-blur-md border-b border-brandBorder z-50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" onclick="switchTab('home')" class="flex items-center gap-2.5">
+                <span class="font-mono text-[10px] bg-accent/10 text-accent border border-accent/20 px-2.5 py-0.5 rounded font-bold" id="site-badge-brand">VITIM</span>
+                <span class="text-sm font-extrabold tracking-tight text-slate-200" id="site-text-brand">STUDIO</span>
             </a>
             
+            <!-- Links do Menu Desktop (Alternam abas ao invés de pular rolagem) -->
             <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-400 tracking-wider uppercase">
-                <a href="#servicos" class="hover:text-cyan-400 transition-colors">Serviços</a>
-                <a href="#simulador" class="hover:text-cyan-400 transition-colors">Simular Orçamento</a>
-                <a href="#portfolio" class="hover:text-cyan-400 transition-colors">Portfólio</a>
-                <a href="#sobre" class="hover:text-cyan-400 transition-colors">Sobre Mim</a>
-                <!-- Link Admin será injetado dinamicamente via JS apenas após o login bem-sucedido -->
-                <span id="nav-admin-container"></span>
+                <button onclick="switchTab('home')" class="nav-tab-btn active hover:text-slate-200 transition-colors py-1" id="tab-btn-home">Início</button>
+                <button onclick="switchTab('servicos')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-servicos">Serviços</button>
+                <button onclick="switchTab('simulador')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-simulador">Fazer Orçamento</button>
+                <button onclick="switchTab('portfolio')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-portfolio">Portfólio</button>
+                <button onclick="switchTab('sobre')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-sobre">Sobre Vitim</button>
+                <!-- Seção secreta de Admin: injetada via JS apenas se logado -->
+                <span id="nav-admin-tab-container"></span>
             </nav>
 
             <div class="flex items-center gap-3">
-                <button onclick="abrirModalLogin()" class="text-slate-400 hover:text-cyan-400 transition-colors p-2 rounded-lg hover:bg-slate-900/50" title="Acesso Administrativo">
-                    <i class="fa-solid fa-lock text-sm"></i>
+                <button onclick="toggleMoreMenu()" class="text-slate-400 hover:text-slate-200 transition-colors p-2.5 rounded-xl hover:bg-slate-900/60" title="Mais Opções">
+                    <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                 </button>
-                <a href="#simulador" class="bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/20 hover:border-cyan-500/50 text-xs font-bold px-3.5 py-2 rounded-lg transition-all flex items-center gap-1.5 shadow-lg shadow-cyan-500/5">
-                    <i class="fa-solid fa-calculator"></i> Simular Orçamento
-                </a>
+                <button onclick="switchTab('simulador')" class="hidden sm:flex bg-slate-900 hover:bg-slate-800 text-accent border border-slate-800 hover:border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all items-center gap-1.5 shadow-lg shadow-cyan-500/5">
+                    <i class="fa-solid fa-calculator"></i> Simular Valor
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- APRESENTAÇÃO PRINCIPAL (HERO) -->
-    <section class="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 overflow-hidden">
-        <!-- Grades de tecnologia de fundo -->
-        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b08_1px,transparent_1px),linear-gradient(to_bottom,#1e293b08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[450px] h-[220px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <!-- NAVEGAÇÃO MOBILE INFERIOR (Estilo App Nativo) -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-brandDark/95 border-t border-brandBorder z-50 backdrop-blur-md py-2 px-4 flex items-center justify-around text-slate-400">
+        <button onclick="switchTab('home')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-home">
+            <i class="fa-solid fa-house text-sm"></i>
+            <span>Início</span>
+        </button>
+        <button onclick="switchTab('servicos')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-servicos">
+            <i class="fa-solid fa-laptop-code text-sm"></i>
+            <span>Serviços</span>
+        </button>
+        <button onclick="switchTab('simulador')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-simulador">
+            <i class="fa-solid fa-calculator text-sm"></i>
+            <span>Simulador</span>
+        </button>
+        <button onclick="switchTab('portfolio')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-portfolio">
+            <i class="fa-solid fa-briefcase text-sm"></i>
+            <span>Portfólio</span>
+        </button>
+        <!-- Injetado dinamicamente caso logado, se não, botão login -->
+        <span id="mobile-admin-btn-container" class="flex items-center justify-center">
+            <button onclick="abrirModalLogin()" class="flex flex-col items-center gap-1 text-[10px] font-medium">
+                <i class="fa-solid fa-lock text-sm"></i>
+                <span>Admin</span>
+            </button>
+        </span>
+    </nav>
 
-        <div class="max-w-3xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/5 border border-cyan-500/10 text-[10px] text-cyan-400 font-mono mb-6 uppercase tracking-wider">
+    <!-- CONTAINER MULTIPÁGINAS CENTRAL (SPA) -->
+    <main class="max-w-6xl w-full mx-auto px-6 pt-24 pb-24 md:pb-16 flex-grow flex flex-col justify-center">
+
+        <!-- 1. TAB: INÍCIO (HERO) -->
+        <section id="view-home" class="tab-view relative flex flex-col items-center justify-center py-16 text-center">
+            <!-- Glow background -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-brandBorder text-[10px] text-accent font-mono mb-6 uppercase tracking-wider">
                 <span class="flex h-2 w-2 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                 </span>
                 Disponível para Projetos Rápidos & Seguros
             </div>
             
-            <!-- IDs dinâmicos que o Admin altera de verdade -->
-            <h1 id="hero-title" class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white">
+            <h1 id="hero-title" class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white max-w-4xl">
                 Carregamento Rápido.<br>
                 <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">Segurança contra Invasões.</span>
             </h1>
             
-            <p id="hero-subtitle" class="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+            <p id="hero-subtitle" class="text-xs sm:text-sm md:text-base text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
                 Eu não uso frameworks pesados que travam celulares antigos. Desenvolvo páginas escritas à mão, ultra-leves e com sistemas de defesa ativos.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="#simulador" class="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-brandDark font-extrabold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm tracking-wide shadow-lg shadow-cyan-500/10">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+                <button onclick="switchTab('simulador')" class="w-full sm:w-auto bg-accent hover:bg-accent text-brandDark font-extrabold px-6 py-3.5 rounded-xl transition-all text-xs tracking-wider uppercase shadow-lg shadow-cyan-500/10">
                     <i class="fa-solid fa-calculator mr-1.5"></i>Simular Valor na Hora
-                </a>
-                <a id="hero-direct-whatsapp" href="#" target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 font-bold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-cyan-400"></i>Falar Conectado
+                </button>
+                <a id="hero-direct-whatsapp" href="#" target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-6 py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>Falar Conectado
                 </a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- SERVIÇOS (Dinamizados via Javascript e Admin) -->
-    <section id="servicos" class="py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-900">
-        <div class="mb-14">
-            <span class="font-mono text-[10px] text-cyan-400 font-bold tracking-widest uppercase">SOLUÇÕES ROBUSTAS</span>
-            <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Serviços de Desenvolvimento</h2>
-            <p class="text-sm text-slate-400 mt-1 max-w-lg">Foco em construir sistemas eficientes que não travam o dispositivo do seu cliente final.</p>
-        </div>
+        <!-- 2. TAB: SERVIÇOS -->
+        <section id="view-servicos" class="tab-view hidden py-10">
+            <div class="mb-12 text-center sm:text-left">
+                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">SOLUÇÕES ROBUSTAS</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Serviços de Desenvolvimento</h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg">Foco em construir sistemas eficientes que não travam o dispositivo do seu cliente final.</p>
+            </div>
 
-        <div id="servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Gerado via Javascript dinamicamente -->
-        </div>
-    </section>
+            <div id="servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Gerado via Javascript dinamicamente -->
+            </div>
+        </section>
 
-    <!-- SIMULADOR DE ORÇAMENTO INTERATIVO (WhatsApp Form) -->
-    <section id="simulador" class="py-24 bg-slate-950/60 border-y border-slate-900">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6">
-            <div class="text-center mb-12">
-                <span class="font-mono text-[10px] text-cyan-400 font-bold tracking-widest uppercase">INVESTIMENTO TRANSPARENTE</span>
+        <!-- 3. TAB: SIMULADOR -->
+        <section id="view-simulador" class="tab-view hidden py-10">
+            <div class="text-center mb-10">
+                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">INVESTIMENTO TRANSPARENTE</span>
                 <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Simulador de Projeto</h2>
-                <p class="text-sm text-slate-400 mt-1">Escolha os pacotes abaixo e tenha um valor exato estimado na hora.</p>
+                <p class="text-xs text-slate-400 mt-1">Escolha os pacotes abaixo e tenha um valor exato estimado na hora.</p>
             </div>
 
-            <div class="bg-brandCard border border-slate-800/80 rounded-2xl p-6 sm:p-10 shadow-xl">
-                <!-- Nome do Cliente para Personalizar o WhatsApp -->
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-widest font-mono">Nome ou Empresa (Opcional)</label>
-                    <input type="text" id="client-name" placeholder="Ex: Oficina Mecânica Silva" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 px-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-all font-mono">
+            <div class="bg-brandCard border border-brandBorder rounded-3xl p-6 sm:p-10 shadow-xl max-w-3xl mx-auto">
+                <!-- Nome do Cliente -->
+                <div class="mb-6">
+                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest font-mono">Nome ou Empresa (Opcional)</label>
+                    <input type="text" id="client-name" placeholder="Ex: Oficina Mecânica Silva" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 placeholder-slate-650 focus:outline-none focus:border-accent transition-all font-mono">
                 </div>
 
                 <!-- Etapa 1: Base -->
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest font-mono">1. Base do Serviço</label>
-                    <div id="simulador-base-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="mb-6">
+                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">1. Base do Serviço</label>
+                    <div id="simulador-base-container" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <!-- Gerado via Javascript dinamicamente -->
                     </div>
                 </div>
 
                 <!-- Etapa 2: Extras -->
-                <div class="mb-10">
-                    <label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest font-mono">2. Otimizações Extras (Opcionais)</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-cyan-500/20 transition-all">
+                <div class="mb-8">
+                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">2. Otimizações Extras (Opcionais)</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
                             <input type="checkbox" id="ext-seo" value="150" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
                                 <span class="font-bold text-xs text-slate-200">Indexação SEO Profissional (+ R$ 150)</span>
@@ -230,7 +308,7 @@
                             </div>
                         </label>
                         
-                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-cyan-500/20 transition-all">
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
                             <input type="checkbox" id="ext-firewall" value="180" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
                                 <span class="font-bold text-xs text-slate-200">Blindagem de Firewall (+ R$ 180)</span>
@@ -238,7 +316,7 @@
                             </div>
                         </label>
 
-                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-cyan-500/20 transition-all">
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
                             <input type="checkbox" id="ext-speed" value="100" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
                                 <span class="font-bold text-xs text-slate-200">Otimização Mobile Extrema (+ R$ 100)</span>
@@ -246,7 +324,7 @@
                             </div>
                         </label>
 
-                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-cyan-500/20 transition-all">
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
                             <input type="checkbox" id="ext-express" value="200" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
                                 <span class="font-bold text-xs text-slate-200">Entrega Rápida 48h (+ R$ 200)</span>
@@ -257,320 +335,353 @@
                 </div>
 
                 <!-- Resultado -->
-                <div class="border-t border-slate-800/85 pt-8 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="border-t border-brandBorder pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">Investimento Previsto</span>
-                        <div class="text-4xl md:text-5xl font-extrabold text-cyan-400 mt-1 font-mono" id="total-val">R$ 350</div>
-                        <span class="text-[10px] text-slate-500 block mt-2">Valores limpos, sem mensalidades ocultas ou taxas ocultas.</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Investimento Previsto</span>
+                        <div class="text-4xl md:text-5xl font-black text-accent mt-1 font-mono" id="total-val">R$ 350</div>
+                        <span class="text-[10px] text-slate-500 block mt-2">Valores limpos, sem mensalidades ou taxas ocultas.</span>
                     </div>
 
-                    <button onclick="enviarOrcamentoWhatsApp()" class="w-full md:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-brandDark font-extrabold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.01] shadow-xl flex items-center justify-center gap-2">
+                    <button onclick="enviarOrcamentoWhatsApp()" class="w-full sm:w-auto bg-accent hover:bg-accent text-brandDark font-extrabold px-8 py-4 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2">
                         <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Projeto Via WhatsApp
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- PORTFÓLIO INTERATIVO -->
-    <section id="portfolio" class="py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-900">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-                <span class="font-mono text-[10px] text-cyan-400 font-bold tracking-widest uppercase">TRABALHO REAL</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Casos de Sucesso</h2>
-                <p class="text-sm text-slate-400 mt-1">Filtre as categorias para classificar os trabalhos executados.</p>
-            </div>
-            
-            <!-- Abas do Filtro (JS) -->
-            <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800 max-w-max">
-                <button onclick="filtrarPortfolio('todos')" id="btn-todos" class="px-3 py-1.5 rounded text-xs font-bold transition-all bg-cyan-500 text-brandDark">Todos</button>
-                <button onclick="filtrarPortfolio('web')" id="btn-web" class="px-3 py-1.5 rounded text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Apenas Web</button>
-                <button onclick="filtrarPortfolio('security')" id="btn-security" class="px-3 py-1.5 rounded text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Apenas Segurança</button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="portfolio-container">
-            <!-- Projeto 1 (Web) -->
-            <div class="project-card bg-brandCard border border-slate-800/80 rounded-xl overflow-hidden group transition-all duration-300" data-category="web">
-                <div class="bg-slate-950 px-4 py-2 flex items-center gap-2 border-b border-slate-800/60">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-500/40"></span>
-                    <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">alphaclean.com.br</div>
+        <!-- 4. TAB: PORTFÓLIO -->
+        <section id="view-portfolio" class="tab-view hidden py-10">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+                <div>
+                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">TRABALHO REAL</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Casos de Sucesso</h2>
+                    <p class="text-xs text-slate-400 mt-1">Filtre as categorias para classificar os trabalhos executados.</p>
                 </div>
-                <div class="p-6">
-                    <span class="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">WEB DEVELOPMENT</span>
-                    <h3 class="text-lg font-bold text-white mt-3 mb-2">Landing Page Alpha Clean</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Desenvolvimento de uma página comercial focada em conversões locais. Redução drástica do tamanho total da página de 4.2MB para apenas 320KB, abrindo instantaneamente.</p>
-                    <div class="flex items-center justify-between mt-6">
-                        <div class="flex gap-2">
-                            <span class="font-mono text-[9px] text-slate-400">#Tailwind</span>
-                            <span class="font-mono text-[9px] text-slate-400">#HTML5</span>
-                        </div>
-                        <button onclick="abrirDetalhesProjeto('Alpha Clean — Site focado em vendas e carregamento ultra otimizado com redução de bundle de mídia.')" class="text-[11px] font-bold text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1">
-                            Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Projeto 2 (Security) -->
-            <div class="project-card bg-brandCard border border-slate-800/80 rounded-xl overflow-hidden group transition-all duration-300" data-category="security">
-                <div class="bg-slate-950 px-4 py-2 flex items-center gap-2 border-b border-slate-800/60">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-500/40"></span>
-                    <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">auditoria-api.internal</div>
-                </div>
-                <div class="p-6">
-                    <span class="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">SECURITY DEFENSE</span>
-                    <h3 class="text-lg font-bold text-white mt-3 mb-2">Blindagem de Painel de Clientes</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Auditoria completa em painel de clientes. Identificação de vulnerabilidades de injeção direta de dados e aplicação de filtros estritos de validação e sanitização (XSS/SQLi).</p>
-                    <div class="flex items-center justify-between mt-6">
-                        <div class="flex gap-2">
-                            <span class="font-mono text-[9px] text-slate-400">#OWASP</span>
-                            <span class="font-mono text-[9px] text-slate-400">#Sanitization</span>
-                        </div>
-                        <button onclick="abrirDetalhesProjeto('Blindagem de Banco de Dados — Correção em formulários críticos impedindo SQLi e roubos de sessão ativos.')" class="text-[11px] font-bold text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1">
-                            Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detalhes do Projeto Modal -->
-        <div id="modal-projeto" class="hidden fixed inset-0 z-[150] bg-brandDark/85 backdrop-blur-sm flex items-center justify-center p-4">
-            <div class="bg-brandCard border border-slate-800 p-6 rounded-2xl max-w-sm w-full">
-                <div class="flex justify-between items-start mb-4">
-                    <h4 class="font-bold text-white">Informações do Projeto</h4>
-                    <button onclick="fecharModalProjeto()" class="text-slate-500 hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <p id="modal-projeto-texto" class="text-xs text-slate-400 leading-relaxed mb-6"></p>
-                <button onclick="fecharModalProjeto()" class="w-full py-2.5 bg-slate-850 hover:bg-slate-800 text-slate-200 text-xs font-bold rounded-lg border border-slate-800 transition-colors">Entendido</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- SOBRE MIM -->
-    <section id="sobre" class="py-24 px-4 sm:px-6 bg-[#02050c] border-t border-slate-900">
-        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div class="w-32 h-32 rounded-xl bg-slate-900 border-2 border-cyan-500/30 flex-shrink-0 flex items-center justify-center text-slate-300 relative shadow-inner">
-                <i class="fa-solid fa-terminal text-4xl text-cyan-400"></i>
-                <div class="absolute -bottom-2 -right-2 bg-cyan-500/10 text-cyan-400 text-[10px] font-mono border border-cyan-500/20 px-1.5 py-0.5 rounded font-bold">Vitim</div>
-            </div>
-            <div>
-                <span class="font-mono text-[10px] text-cyan-400 font-bold tracking-widest uppercase">DESENVOLVIMENTO DE ALTA VELOCIDADE</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 mb-4 text-white">Me chamo Vitim</h2>
                 
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
-                    Muitos programadores começam com computadores caros e acabam entregando sites pesados que travam no celular do cliente. Eu comecei do absoluto zero, estudando em uma máquina simples de **apenas 2GB de RAM**, e foi aí que aprendi o maior segredo da programação: **otimização de código extrema**.
-                </p>
-                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
-                    Quando cada megabyte e cada recurso de processamento importam, você aprende a escrever código de verdade. Especializei-me em desenvolver landing pages e sites inteiramente escritos à mão com proteção ativa (WAF) que carregam instantaneamente mesmo em conexões de internet fracas.
-                </p>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-code text-cyan-400 text-xs"></i>
-                        <span class="text-xs text-slate-300 font-mono">Código Manual Puro</span>
+                <!-- Abas do Filtro -->
+                <div class="flex gap-2 bg-slate-900 p-1 rounded-xl border border-brandBorder max-w-max self-start">
+                    <button onclick="filtrarPortfolio('todos')" id="btn-todos" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-accent text-brandDark">Todos</button>
+                    <button onclick="filtrarPortfolio('web')" id="btn-web" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Web</button>
+                    <button onclick="filtrarPortfolio('security')" id="btn-security" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Segurança</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="portfolio-container">
+                <!-- Projeto 1 (Web) -->
+                <div class="project-card bg-brandCard border border-brandBorder rounded-2xl overflow-hidden group transition-all duration-300" data-category="web">
+                    <div class="bg-brandDark px-4 py-2.5 flex items-center gap-2 border-b border-brandBorder">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/40"></span>
+                        <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">alphaclean.com.br</div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-gauge-high text-cyan-400 text-xs"></i>
-                        <span class="text-xs text-slate-300 font-mono">Alta Performance</span>
+                    <div class="p-6">
+                        <span class="text-[9px] font-mono font-bold text-accent bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">WEB DEVELOPMENT</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Landing Page Alpha Clean</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Desenvolvimento de uma página comercial focada em conversões locais. Redução drástica do tamanho total da página de 4.2MB para apenas 320KB, abrindo instantaneamente.</p>
+                        <div class="flex items-center justify-between mt-6">
+                            <div class="flex gap-2">
+                                <span class="font-mono text-[9px] text-slate-400">#Tailwind</span>
+                                <span class="font-mono text-[9px] text-slate-400">#HTML5</span>
+                            </div>
+                            <button onclick="abrirDetalhesProjeto('Alpha Clean — Site focado em vendas e carregamento ultra otimizado com redução de bundle de mídia.')" class="text-xs font-bold text-slate-300 hover:text-accent transition-colors flex items-center gap-1">
+                                Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-shield-virus text-cyan-400 text-xs"></i>
-                        <span class="text-xs text-slate-300 font-mono">Segurança Defensiva</span>
+                </div>
+
+                <!-- Projeto 2 (Security) -->
+                <div class="project-card bg-brandCard border border-brandBorder rounded-2xl overflow-hidden group transition-all duration-300" data-category="security">
+                    <div class="bg-brandDark px-4 py-2.5 flex items-center gap-2 border-b border-brandBorder">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/40"></span>
+                        <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">auditoria-api.internal</div>
                     </div>
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-microchip text-cyan-400 text-xs"></i>
-                        <span class="text-xs text-slate-300 font-mono">Otimização Extrema</span>
+                    <div class="p-6">
+                        <span class="text-[9px] font-mono font-bold text-accent bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">SECURITY DEFENSE</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Blindagem de Painel de Clientes</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Auditoria completa em painel de clientes. Identificação de vulnerabilidades de injeção direta de dados e aplicação de filtros estritos de validação e sanitização (XSS/SQLi).</p>
+                        <div class="flex items-center justify-between mt-6">
+                            <div class="flex gap-2">
+                                <span class="font-mono text-[9px] text-slate-400">#OWASP</span>
+                                <span class="font-mono text-[9px] text-slate-400">#Sanitization</span>
+                            </div>
+                            <button onclick="abrirDetalhesProjeto('Blindagem de Banco de Dados — Correção em formulários críticos impedindo SQLi e roubos de sessão ativos.')" class="text-xs font-bold text-slate-300 hover:text-accent transition-colors flex items-center gap-1">
+                                Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- SEÇÃO ADMIN (ALTAMENTE DINÂMICA - SÓ EXIBIDA SE LOGADO) -->
-    <section id="admin-section" class="hidden py-24 px-4 sm:px-6 bg-slate-950 border-t border-slate-900 scroll-mt-20">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-12">
-                <span class="font-mono text-[10px] text-cyan-400 font-bold tracking-widest uppercase">CENTRO DE CONTROLE MASTER</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Administração do Site</h2>
-                <p class="text-sm text-slate-400 mt-1">Gerencie textos, serviços, administradores, pedidos e logs de firewall.</p>
+            <!-- Detalhes do Projeto Modal -->
+            <div id="modal-projeto" class="hidden fixed inset-0 z-[250] bg-brandDark/85 backdrop-blur-sm flex items-center justify-center p-4">
+                <div class="bg-brandCard border border-brandBorder p-6 rounded-2xl max-w-sm w-full">
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="font-bold text-white">Informações do Projeto</h4>
+                        <button onclick="fecharModalProjeto()" class="text-slate-500 hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <p id="modal-projeto-texto" class="text-xs text-slate-400 leading-relaxed mb-6"></p>
+                    <button onclick="fecharModalProjeto()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-brandBorder transition-colors">Entendido</button>
+                </div>
             </div>
+        </section>
 
-            <!-- PAINEL CONTROL CENTER (Exibido apenas ao logar) -->
-            <div class="bg-brandCard border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl space-y-10">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 border border-cyan-500/20">
-                            <i class="fa-solid fa-gears"></i>
+        <!-- 5. TAB: SOBRE MIM -->
+        <section id="view-sobre" class="tab-view hidden py-10">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                <div class="w-32 h-32 rounded-2xl bg-slate-900 border-2 border-accent/30 flex-shrink-0 flex items-center justify-center text-slate-300 relative shadow-inner">
+                    <i class="fa-solid fa-terminal text-4xl text-accent animate-pulse"></i>
+                    <div class="absolute -bottom-2 -right-2 bg-accent/10 text-accent text-[10px] font-mono border border-accent/20 px-1.5 py-0.5 rounded font-bold">Vitim</div>
+                </div>
+                <div>
+                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">DESENVOLVIMENTO DE ALTA VELOCIDADE</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 mb-4 text-white">Me chamo Vitim</h2>
+                    
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                        Muitos programadores começam com computadores caros e acabam entregando sites pesados que travam no celular do cliente. Eu comecei estudando em uma máquina simples de **apenas 2GB de RAM**, e foi aí que aprendi o maior segredo da programação: **otimização de código extrema**.
+                    </p>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                        Quando cada megabyte e cada recurso de processamento importam, você aprende a escrever código de verdade. Especializei-me em desenvolver landing pages e sites inteiramente escritos à mão com proteção ativa (WAF) que carregam instantaneamente mesmo em conexões de internet fracas.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-code text-accent text-xs"></i>
+                            <span class="text-xs text-slate-300 font-mono">Código Manual Puro</span>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-slate-200 text-sm">Seja bem-vindo, <span id="admin-logged-name">Admin</span></h4>
-                            <span class="text-[9px] text-cyan-500 font-mono">Painel Administrativo Ativo</span>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-gauge-high text-accent text-xs"></i>
+                            <span class="text-xs text-slate-300 font-mono">Alta Performance</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-shield-virus text-accent text-xs"></i>
+                            <span class="text-xs text-slate-300 font-mono">Segurança Defensiva</span>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-microchip text-accent text-xs"></i>
+                            <span class="text-xs text-slate-300 font-mono">Otimização Extrema</span>
                         </div>
                     </div>
-                    <button onclick="processarLogoutAdmin()" class="px-3 py-1.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-mono rounded-lg border border-red-500/20 transition-all">
-                        <i class="fa-solid fa-power-off"></i> Sair do Painel
-                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TAB: SEÇÃO ADMIN (ALTAMENTE DINÂMICA - SÓ ACESSÍVEL SE LOGADO) -->
+        <section id="view-admin" class="tab-view hidden py-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase font-mono">PAINEL DE CONTROLE MASTER</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Configurações Gerais do Sistema</h2>
+                    <p class="text-xs text-slate-400 mt-1">Gerencie a identidade, os textos, o catálogo de serviços e monitore pedidos.</p>
                 </div>
 
-                <!-- 1. Editor do Hero (Mudar textos) -->
-                <div class="space-y-4">
-                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2"><i class="fa-solid fa-pen-nib mr-1.5 text-cyan-400"></i>1. Editar Capa do Site (Hero)</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Título Principal</label>
-                            <textarea id="edit-hero-title" rows="2" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Subtítulo de Detalhes</label>
-                            <textarea id="edit-hero-sub" rows="2" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition-all"></textarea>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Seu WhatsApp (Ex: 5546991338923)</label>
-                        <input type="text" id="edit-whatsapp" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 font-mono transition-all">
-                    </div>
-                    <button onclick="salvarAlteracoesGerais()" class="py-2 px-4 bg-cyan-500 hover:bg-cyan-400 text-brandDark font-bold text-xs rounded-lg transition-colors">
-                        Salvar Informações da Capa
-                    </button>
-                </div>
-
-                <!-- 2. Adicionar Serviços -->
-                <div class="space-y-4 border-t border-slate-800 pt-8">
-                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2"><i class="fa-solid fa-plus-circle mr-1.5 text-cyan-400"></i>2. Adicionar Novo Serviço</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Nome do Serviço</label>
-                            <input type="text" id="add-serv-nome" placeholder="Ex: Criação de WebApp" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Preço (R$)</label>
-                                <input type="number" id="add-serv-preco" placeholder="350" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+                <div class="bg-brandCard border border-brandBorder rounded-3xl p-6 md:p-10 shadow-2xl space-y-10">
+                    <div class="flex items-center justify-between border-b border-brandBorder pb-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
+                                <i class="fa-solid fa-user-gear"></i>
                             </div>
                             <div>
-                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Ícone</label>
-                                <select id="add-serv-icone" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                                    <option value="fa-code">Desenvolvimento</option>
-                                    <option value="fa-shield-halved">Escudo / Defesa</option>
-                                    <option value="fa-bolt">Raio / Performance</option>
-                                    <option value="fa-database">Bando de Dados</option>
-                                    <option value="fa-server">Servidores</option>
+                                <h4 class="font-bold text-slate-200 text-sm">Olá, <span id="admin-logged-name">Admin</span></h4>
+                                <span class="text-[9px] text-accent font-mono">Painel de Controle Ativo</span>
+                            </div>
+                        </div>
+                        <button onclick="processarLogoutAdmin()" class="px-3.5 py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-xs font-mono rounded-xl border border-red-500/20 transition-all flex items-center gap-1">
+                            <i class="fa-solid fa-power-off text-[10px]"></i> Sair
+                        </button>
+                    </div>
+
+                    <!-- 1. Customização Visual e Identidade do Site -->
+                    <div class="space-y-4">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2"><i class="fa-solid fa-palette mr-1.5 text-accent"></i>1. Identidade Visual & Tema</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Cor Destaque Principal</label>
+                                <select id="edit-accent-color" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                    <option value="cyan">Ciano Cyber (Padrão)</option>
+                                    <option value="emerald">Verde Esmeralda</option>
+                                    <option value="orange">Laranja Neon</option>
+                                    <option value="indigo">Índigo Cósmico</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Estilo do Fundo</label>
+                                <select id="edit-bg-style" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                    <option value="solid">Preto Sólido</option>
+                                    <option value="techGrid">Grade de Tecnologia</option>
+                                    <option value="cosmicGlow">Brilho Cósmico</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Descrição Curta</label>
-                        <textarea id="add-serv-desc" rows="2" placeholder="O que esse serviço agrega..." class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"></textarea>
-                    </div>
-                    <button onclick="adicionarNovoServico()" class="py-2.5 px-4 bg-cyan-500 hover:bg-cyan-400 text-brandDark font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5">
-                        <i class="fa-solid fa-square-plus"></i> Publicar Novo Serviço
-                    </button>
-                </div>
-
-                <!-- 3. Gerenciar Serviços Ativos -->
-                <div class="space-y-4 border-t border-slate-800 pt-8">
-                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2"><i class="fa-solid fa-list-check mr-1.5 text-cyan-400"></i>3. Catálogo Ativo</h5>
-                    <div id="admin-services-list" class="space-y-2 max-h-56 overflow-y-auto pr-2">
-                        <!-- Gerado via JS -->
-                    </div>
-                </div>
-
-                <!-- 4. NOVO: Gerenciador de Pedidos e Orçamentos Recebidos -->
-                <div class="space-y-4 border-t border-slate-800 pt-8">
-                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2"><i class="fa-solid fa-clipboard-list mr-1.5 text-cyan-400"></i>4. Controle de Pedidos (O.S.)</h5>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300 font-mono">
-                            <thead class="bg-brandDark text-cyan-400 border-b border-slate-800">
-                                <tr>
-                                    <th class="p-3">Cliente</th>
-                                    <th class="p-3">Serviço / Extras</th>
-                                    <th class="p-3">Valor</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3 text-right">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-orders-list" class="divide-y divide-slate-800/50">
-                                <!-- Injetado dinamicamente via JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- 5. Gerenciar Administradores -->
-                <div class="space-y-4 border-t border-slate-800 pt-8">
-                    <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2"><i class="fa-solid fa-users-gear mr-1.5 text-cyan-400"></i>5. Gerenciar Administradores</h5>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Form para Criar Novo Admin -->
-                        <div class="space-y-3.5 bg-brandDark/40 p-4 rounded-xl border border-slate-800">
-                            <span class="text-[9px] font-mono text-cyan-500 uppercase font-bold tracking-wider">Registrar Novo Acesso</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Novo Usuário</label>
-                                <input type="text" id="add-admin-user" placeholder="Ex: LucasDev" class="w-full bg-brandDark border border-slate-800 rounded-lg py-1.5 px-2.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Nome do Estúdio (Badge)</label>
+                                <input type="text" id="edit-studio-badge" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
                             </div>
                             <div>
-                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Senha de Acesso</label>
-                                <input type="password" id="add-admin-pass" placeholder="Defina a senha" class="w-full bg-brandDark border border-slate-800 rounded-lg py-1.5 px-2.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500">
-                            </div>
-                            <button onclick="adicionarNovoAdmin()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 hover:text-cyan-300 text-xs font-bold font-mono rounded-lg transition-colors border border-slate-700">
-                                <i class="fa-solid fa-plus mr-1"></i> Autorizar Administrador
-                            </button>
-                        </div>
-
-                        <!-- Lista de Administradores Cadastrados -->
-                        <div class="bg-brandDark/40 p-4 rounded-xl border border-slate-800">
-                            <span class="text-[9px] font-mono text-cyan-500 uppercase font-bold tracking-wider block mb-3">Administradores Ativos</span>
-                            <div id="admin-users-list" class="space-y-2 max-h-36 overflow-y-auto pr-1">
-                                <!-- Gerado via JS -->
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Nome do Estúdio (Logo)</label>
+                                <input type="text" id="edit-studio-text" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 6. Logs do Firewall (WAF) em Tempo Real -->
-                <div class="space-y-4 border-t border-slate-800 pt-8">
-                    <h5 class="text-xs font-bold text-red-400 uppercase tracking-widest font-mono border-b border-slate-800/60 pb-2 flex items-center justify-between">
-                        <span><i class="fa-solid fa-bug mr-1.5"></i>6. Relatório do Firewall (WAF)</span>
-                        <span id="waf-log-count" class="text-[10px] bg-red-950 text-red-400 px-2 py-0.5 rounded border border-red-500/20">0 Ataques Barrados</span>
-                    </h5>
-                    <div class="bg-black/50 p-4 rounded-xl border border-slate-850">
-                        <div class="text-[10px] font-mono text-slate-500 mb-2 flex justify-between">
-                            <span>REGISTROS DE SEGURANÇA (LOGS)</span>
-                            <span class="text-cyan-500">Live Active</span>
+                    <!-- 2. Editor do Hero (Textos) -->
+                    <div class="space-y-4 border-t border-brandBorder pt-8">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2"><i class="fa-solid fa-pen-nib mr-1.5 text-accent"></i>2. Textos e Capa (Hero)</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Título do Hero (Permite tags HTML para realce)</label>
+                                <textarea id="edit-hero-title" rows="3" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Subtítulo do Hero</label>
+                                <textarea id="edit-hero-sub" rows="3" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+                            </div>
                         </div>
-                        <div id="waf-logs-container" class="font-mono text-[10px] text-slate-400 space-y-1.5 max-h-40 overflow-y-auto pr-2">
-                            <div class="text-slate-500 italic">Nenhum comportamento hacker detectado nesta sessão.</div>
+                        <div>
+                            <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Seu WhatsApp de Recebimento (Somente Números, ex: 5546991338923)</label>
+                            <input type="text" id="edit-whatsapp" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent font-mono">
+                        </div>
+                        <button onclick="salvarAlteracoesGerais()" class="py-2.5 px-5 bg-accent hover:bg-accent text-brandDark font-bold text-xs rounded-xl transition-colors">
+                            Salvar Alterações Visuais e de Texto
+                        </button>
+                    </div>
+
+                    <!-- 3. Gerenciamento de Serviços (Catálogo) -->
+                    <div class="space-y-4 border-t border-brandBorder pt-8">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2"><i class="fa-solid fa-plus mr-1.5 text-accent"></i>3. Catálogo de Serviços</h5>
+                        
+                        <!-- Formulário para Criar Serviço -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-brandDark/40 p-4 rounded-2xl border border-brandBorder">
+                            <div>
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Nome do Serviço</label>
+                                <input type="text" id="add-serv-nome" placeholder="Ex: Criação de WebApp" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Preço Base (R$)</label>
+                                    <input type="number" id="add-serv-preco" placeholder="350" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Ícone</label>
+                                    <select id="add-serv-icone" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                        <option value="fa-code">Desenvolvimento</option>
+                                        <option value="fa-shield-halved">Escudo / Defesa</option>
+                                        <option value="fa-bolt">Raio / Performance</option>
+                                        <option value="fa-database">Banco de Dados</option>
+                                        <option value="fa-server">Servidores</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Descrição Curta</label>
+                                <textarea id="add-serv-desc" rows="2" placeholder="O que esse serviço agrega..." class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent"></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button onclick="adicionarNovoServico()" class="py-2.5 px-4 bg-accent hover:bg-accent text-brandDark font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+                                    <i class="fa-solid fa-square-plus"></i> Publicar Novo Serviço
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Serviços Cadastrados -->
+                        <div class="space-y-2 max-h-56 overflow-y-auto pr-2 mt-4" id="admin-services-list">
+                            <!-- Gerado via JS -->
                         </div>
                     </div>
+
+                    <!-- 4. NOVO: Controle de Pedidos e Orçamentos Recebidos -->
+                    <div class="space-y-4 border-t border-brandBorder pt-8">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2"><i class="fa-solid fa-clipboard-list mr-1.5 text-accent"></i>4. Controle de Pedidos (O.S.)</h5>
+                        <div class="overflow-x-auto rounded-xl border border-brandBorder bg-brandDark/40">
+                            <table class="w-full text-left text-xs text-slate-300 font-mono">
+                                <thead class="bg-brandDark text-accent border-b border-brandBorder">
+                                    <tr>
+                                        <th class="p-3">Cliente</th>
+                                        <th class="p-3">Serviço / Extras</th>
+                                        <th class="p-3">Valor</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-orders-list" class="divide-y divide-slate-800/40">
+                                    <!-- Injetado dinamicamente via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 5. Gerenciador de Administradores -->
+                    <div class="space-y-4 border-t border-brandBorder pt-8">
+                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2"><i class="fa-solid fa-users-gear mr-1.5 text-accent"></i>5. Gerenciar Administradores</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Registrar novo admin -->
+                            <div class="space-y-3.5 bg-brandDark/40 p-4 rounded-2xl border border-brandBorder">
+                                <span class="text-[9px] font-mono text-accent uppercase font-bold tracking-wider">Registrar Novo Acesso</span>
+                                <div>
+                                    <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Novo Usuário</label>
+                                    <input type="text" id="add-admin-user" placeholder="Ex: LucasDev" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Senha de Acesso</label>
+                                    <input type="password" id="add-admin-pass" placeholder="Defina a senha" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
+                                </div>
+                                <button onclick="adicionarNovoAdmin()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-accent hover:text-white text-xs font-bold font-mono rounded-xl transition-colors border border-brandBorder">
+                                    <i class="fa-solid fa-plus mr-1"></i> Autorizar Administrador
+                                </button>
+                            </div>
+
+                            <!-- Administradores Ativos -->
+                            <div class="bg-brandDark/40 p-4 rounded-2xl border border-brandBorder">
+                                <span class="text-[9px] font-mono text-accent uppercase font-bold tracking-wider block mb-3">Administradores Ativos</span>
+                                <div id="admin-users-list" class="space-y-2 max-h-36 overflow-y-auto pr-1">
+                                    <!-- Gerado via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Logs do Firewall (WAF) em Tempo Real -->
+                    <div class="space-y-4 border-t border-brandBorder pt-8">
+                        <h5 class="text-xs font-bold text-red-400 uppercase tracking-widest font-mono border-b border-brandBorder pb-2 flex items-center justify-between">
+                            <span><i class="fa-solid fa-bug mr-1.5"></i>6. Relatório do Firewall (WAF)</span>
+                            <span id="waf-log-count" class="text-[10px] bg-red-950 text-red-400 px-2 py-0.5 rounded border border-red-500/20">0 Ataques Barrados</span>
+                        </h5>
+                        <div class="bg-black/50 p-4 rounded-xl border border-brandBorder">
+                            <div class="text-[10px] font-mono text-slate-500 mb-2 flex justify-between">
+                                <span>REGISTROS DE SEGURANÇA (LOGS)</span>
+                                <span class="text-accent animate-pulse">Live Active</span>
+                            </div>
+                            <div id="waf-logs-container" class="font-mono text-[10px] text-slate-400 space-y-1.5 max-h-40 overflow-y-auto pr-2">
+                                <div class="text-slate-500 italic">Nenhum comportamento suspeito detectado nesta sessão.</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+    </main>
 
     <!-- RODAPÉ -->
-    <footer class="bg-brandDark py-12 px-4 border-t border-slate-900">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
-            <div class="flex items-center gap-3">
-                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-wider">VITIM STUDIO</span>
+    <footer class="bg-brandDark py-8 px-6 border-t border-brandBorder text-xs text-slate-500 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <div class="flex items-center gap-2">
+                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-wider" id="footer-studio-name">VITIM STUDIO</span>
                 <span>© 2026. Todos os direitos reservados.</span>
             </div>
-            <div class="flex gap-6">
-                <button onclick="abrirModalLogin()" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5 font-bold">
-                    <span class="h-1.5 w-1.5 rounded-full bg-slate-800 border border-slate-700" id="status-dot"></span> 
+            <div class="flex gap-4">
+                <button onclick="abrirModalLogin()" class="hover:text-accent transition-colors flex items-center gap-1.5 font-bold">
+                    <span class="h-1.5 w-1.5 rounded-full bg-slate-800 border border-slate-750" id="status-dot"></span> 
                     Área Privada
                 </button>
-                <span class="text-slate-850">|</span>
-                <a href="#" class="hover:text-cyan-400 transition-colors">Voltar ao topo</a>
                 <span class="text-slate-800">|</span>
-                <span class="text-cyan-500/70 font-mono flex items-center gap-1.5">
-                    <span class="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                <span class="text-emerald-500/70 font-mono flex items-center gap-1.5">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                     Vitim On-Line
                 </span>
             </div>
@@ -613,76 +724,172 @@
         ];
 
         let state = {
-            heroTitle: "Carregamento Rápido.<br><span class='bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent'>Segurança contra Invasões.</span>",
+            siteBadgeBrand: "VITIM",
+            siteTextBrand: "STUDIO",
+            heroTitle: "Carregamento Rápido.<br><span class='accent-gradient bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent'>Segurança contra Invasões.</span>",
             heroSubtitle: "Eu não uso frameworks pesados que travam celulares antigos. Desenvolvo páginas escritas à mão, ultra-leves e com sistemas de defesa ativos.",
-            whatsappNumber: "5546991338923", // Número oficial corrigido
+            whatsappNumber: "5546991338923", // WhatsApp oficial do Vitim configurado
+            accentColor: "cyan", // Opções: cyan, emerald, orange, indigo
+            bgStyle: "techGrid", // Opções: solid, techGrid, cosmicGlow
             services: [...DEFAULT_SERVICES],
             admins: [...DEFAULT_ADMINS],
-            orders: [], // Base para guardar orçamentos no localstorage
+            orders: [],
             loggedInUser: null
         };
 
-        let wafLogs = []; // Registros de ataques barrados
+        let wafLogs = []; // Histórico de ameaças interceptadas na sessão
 
-        // Inicializa o estado lendo do LocalStorage
-        function initLocalStorage() {
-            if (localStorage.getItem('vitim_studio_title')) {
-                state.heroTitle = localStorage.getItem('vitim_studio_title');
+        // Tema de Cores Mapeado
+        const colorsMap = {
+            cyan: {
+                accent: "#06b6d4",
+                accentHover: "#0891b2",
+                accentGlow: "rgba(6, 182, 212, 0.15)"
+            },
+            emerald: {
+                accent: "#10b981",
+                accentHover: "#059669",
+                accentGlow: "rgba(16, 185, 129, 0.15)"
+            },
+            orange: {
+                accent: "#f97316",
+                accentHover: "#ea580c",
+                accentGlow: "rgba(249, 115, 22, 0.15)"
+            },
+            indigo: {
+                accent: "#6366f1",
+                accentHover: "#4f46e5",
+                accentGlow: "rgba(99, 102, 241, 0.15)"
             }
-            if (localStorage.getItem('vitim_studio_sub')) {
-                state.heroSubtitle = localStorage.getItem('vitim_studio_sub');
+        };
+
+        // Estilos de Fundo Mapeados
+        const bgMap = {
+            solid: "#020617",
+            techGrid: "#020617; background-image: linear-gradient(to right, #1e293b08 1px, transparent 1px), linear-gradient(to bottom, #1e293b08 1px, transparent 1px); background-size: 3rem 3rem;",
+            cosmicGlow: "#03001e; background: radial-gradient(circle at 50% 50%, #120c3b 0%, #03001e 100%);"
+        };
+
+        // Inicializa Banco de Dados Local
+        function initLocalStorage() {
+            if (localStorage.getItem('v_studio_badge')) state.siteBadgeBrand = localStorage.getItem('v_studio_badge');
+            if (localStorage.getItem('v_studio_text')) state.siteTextBrand = localStorage.getItem('v_studio_text');
+            if (localStorage.getItem('v_studio_title')) state.heroTitle = localStorage.getItem('v_studio_title');
+            if (localStorage.getItem('v_studio_sub')) state.heroSubtitle = localStorage.getItem('v_studio_sub');
+            if (localStorage.getItem('v_studio_whatsapp')) state.whatsappNumber = localStorage.getItem('v_studio_whatsapp');
+            if (localStorage.getItem('v_studio_accent')) state.accentColor = localStorage.getItem('v_studio_accent');
+            if (localStorage.getItem('v_studio_bg')) state.bgStyle = localStorage.getItem('v_studio_bg');
+            
+            if (localStorage.getItem('v_studio_services')) {
+                state.services = JSON.parse(localStorage.getItem('v_studio_services'));
+            }
+            if (localStorage.getItem('v_studio_admins')) {
+                state.admins = JSON.parse(localStorage.getItem('v_studio_admins'));
+            } else {
+                localStorage.setItem('v_studio_admins', JSON.stringify(state.admins));
+            }
+            if (localStorage.getItem('v_studio_orders')) {
+                state.orders = JSON.parse(localStorage.getItem('v_studio_orders'));
+            } else {
+                localStorage.setItem('v_studio_orders', JSON.stringify([]));
             }
             
-            // Corrige de forma forçada caso o navegador tenha salvo o número fake antigo
-            const savedWhatsapp = localStorage.getItem('vitim_studio_whatsapp');
-            if (savedWhatsapp && savedWhatsapp !== "5599999999999") {
-                state.whatsappNumber = savedWhatsapp;
-            } else {
-                state.whatsappNumber = "5546991338923";
-                localStorage.setItem('vitim_studio_whatsapp', "5546991338923");
-            }
-
-            if (localStorage.getItem('vitim_studio_services')) {
-                state.services = JSON.parse(localStorage.getItem('vitim_studio_services'));
-            }
-            if (localStorage.getItem('vitim_studio_admins')) {
-                state.admins = JSON.parse(localStorage.getItem('vitim_studio_admins'));
-            } else {
-                localStorage.setItem('vitim_studio_admins', JSON.stringify(state.admins));
-            }
-            if (localStorage.getItem('vitim_studio_orders')) {
-                state.orders = JSON.parse(localStorage.getItem('vitim_studio_orders'));
-            } else {
-                state.orders = [];
-                localStorage.setItem('vitim_studio_orders', JSON.stringify([]));
-            }
             applyState();
         }
 
-        // Aplica as informações salvas na tela do usuário
+        // Aplica o tema e renderizações
         function applyState() {
+            // Aplicar Título e Identidade
+            document.getElementById('site-badge-brand').innerText = state.siteBadgeBrand;
+            document.getElementById('site-text-brand').innerText = state.siteTextBrand;
+            document.getElementById('footer-studio-name').innerText = `${state.siteBadgeBrand} ${state.siteTextBrand}`;
+            document.getElementById('site-browser-title').innerText = `${state.siteBadgeBrand} ${state.siteTextBrand} — Soluções Web & Defesa Digital`;
+            
             document.getElementById('hero-title').innerHTML = state.heroTitle;
             document.getElementById('hero-subtitle').innerText = state.heroSubtitle;
             
-            // Corrige o link direto de contato do WhatsApp
+            // Configurar WhatsApp da Capa
             const cleanNum = state.whatsappNumber.replace(/\D/g, '');
-            document.getElementById('hero-direct-whatsapp').href = `https://wa.me/${cleanNum}?text=E%20a%C3%AD%20Vitim%2C%20tudo%20bem%3F%20Quero%20um%20or%C3%A7amento%20de%20site.`;
+            document.getElementById('hero-direct-whatsapp').href = `https://wa.me/${cleanNum}?text=E%20a%C3%AD%20Vitim%2C%20tudo%20bem%3F%20Gostaria%20de%20um%20or%C3%A7amento%20de%20site.`;
+
+            // Aplicar estilo de Tema Dinâmico via CSS Injected Variables
+            const themeConfig = colorsMap[state.accentColor] || colorsMap.cyan;
+            const bgConfig = bgMap[state.bgStyle] || bgMap.techGrid;
+
+            const customCss = `
+                :root {
+                    --accent: ${themeConfig.accent};
+                    --accent-hover: ${themeConfig.accentHover};
+                    --accent-glow: ${themeConfig.accentGlow};
+                    --bg-style: ${bgConfig};
+                }
+                body {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    background: var(--bg-style);
+                    scroll-behavior: smooth;
+                }
+                .bg-accent { background-color: var(--accent) !important; }
+                .text-accent { color: var(--accent) !important; }
+                .border-accent { border-color: var(--accent) !important; }
+                .hover\\:bg-accent:hover { background-color: var(--accent-hover) !important; }
+                .hover\\:text-accent:hover { color: var(--accent-hover) !important; }
+                .accent-glow { box-shadow: 0 0 25px var(--accent-glow); }
+            `;
+            document.getElementById('dynamic-theme').innerHTML = customCss;
 
             renderizarServicos();
             verificarEstadoDeLoginUI();
         }
 
-        // ENGINE DE DEFESA DE DADOS (WAF FIREWALL)
+        // ALTERNADOR DE ABAS ( Multipáginas - SPA)
+        function switchTab(tabId) {
+            // Se tentar acessar o admin sem logar, abre o login
+            if (tabId === 'admin' && !state.loggedInUser) {
+                abrirModalLogin();
+                return;
+            }
+
+            // Ocultar todas as abas
+            document.querySelectorAll('.tab-view').forEach(view => {
+                view.classList.add('hidden');
+            });
+
+            // Exibir a aba selecionada
+            const targetView = document.getElementById(`view-${tabId}`);
+            if (targetView) targetView.classList.remove('hidden');
+
+            // Atualizar status de navegação Desktop
+            document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                btn.classList.remove('text-accent', 'border-b-2', 'border-accent');
+            });
+            const activeDesktopBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeDesktopBtn) {
+                activeDesktopBtn.classList.add('text-accent', 'border-b-2', 'border-accent');
+            }
+
+            // Atualizar status de navegação Mobile
+            document.querySelectorAll('.mobile-tab-btn').forEach(btn => {
+                btn.classList.remove('text-accent');
+            });
+            const activeMobileBtn = document.getElementById(`mobile-btn-${tabId}`);
+            if (activeMobileBtn) {
+                activeMobileBtn.classList.add('text-accent');
+            }
+
+            fecharMoreMenu();
+        }
+
+        // SISTEMA DE SEGURANÇA (WAF FIREWALL) - Proteção de tags contra bugs de parser HTML
         function verificarSegurancaDeInput(texto, campoOrigem) {
             const padroesAtaque = [
-                /<script/i,
-                /javascript:/i,
-                /onerror/i,
-                /onload/i,
-                /SELECT\s+.*FROM/i,
-                /UNION\s+SELECT/i,
-                /OR\s+['"]?\d+['"]?\s*=\s*['"]?\d+/i,
-                /--/
+                new RegExp('<script', 'i'),
+                new RegExp('javascript:', 'i'),
+                new RegExp('onerror', 'i'),
+                new RegExp('onload', 'i'),
+                new RegExp('SELECT\\s+.*FROM', 'i'),
+                new RegExp('UNION\\s+SELECT', 'i'),
+                new RegExp('OR\\s+[\'"]?\\d+[\'"]?\\s*=\\s*[\'"]?\\d+', 'i'),
+                new RegExp('--', 'i')
             ];
 
             for (let padrao of padroesAtaque) {
@@ -694,13 +901,12 @@
             return true; 
         }
 
-        // Dispara o alerta vermelho do Firewall do Vitim na tela
         function dispararAlertaFirewall(origem, dadosSuspeitos) {
             const alertBox = document.getElementById('firewall-alert');
             document.getElementById('waf-attack-type').innerText = origem;
             alertBox.classList.remove('hidden');
 
-            // Adiciona aos logs do WAF administrativo
+            // Registrar Log
             const dataHora = new Date().toLocaleTimeString();
             const logMsg = `[${dataHora}] BLOCKED: Tentativa de ataque via ${origem} com dados: "${dadosSuspeitos.substring(0, 30)}..."`;
             wafLogs.unshift(logMsg);
@@ -709,6 +915,12 @@
             setTimeout(() => {
                 alertBox.classList.add('hidden');
             }, 5000);
+        }
+
+        function simularAtaqueFirewall() {
+            // Correção técnica crucial: barra invertida para impedir que o parser do navegador quebre o site
+            verificarSegurancaDeInput("<script>alert('Ataque Simulado pelo Usuário')<\/script>", "Simulados WAF Button");
+            fecharMoreMenu();
         }
 
         function updateWafLogsUI() {
@@ -724,13 +936,13 @@
             }
 
             container.innerHTML = wafLogs.map(log => `
-                <div class="text-red-400 border-l border-red-500 pl-2 py-0.5 bg-red-950/10 rounded">
+                <div class="text-red-400 border-l border-red-500 pl-2 py-1 bg-red-950/10 rounded">
                     ${log}
                 </div>
             `).join('');
         }
 
-        // Renderiza dinamicamente as vitrines, simuladores e listas
+        // RENDERIZADOR DOS COMPONENTES DINÂMICOS
         function renderizarServicos() {
             const containerPublico = document.getElementById('servicos-container');
             const containerSimulador = document.getElementById('simulador-base-container');
@@ -740,16 +952,16 @@
                 containerPublico.innerHTML = "";
                 state.services.forEach(serv => {
                     containerPublico.innerHTML += `
-                        <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-cyan-500/30 transition-all duration-300 flex flex-col justify-between">
+                        <div class="bg-brandCard border border-brandBorder p-6 rounded-2xl hover:border-accent/40 transition-all duration-300 flex flex-col justify-between">
                             <div>
-                                <div class="w-10 h-10 rounded-lg bg-cyan-500/5 flex items-center justify-center text-cyan-400 mb-6">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/5 flex items-center justify-center text-accent mb-6 border border-accent/15">
                                     <i class="fa-solid ${serv.icone} text-lg"></i>
                                 </div>
-                                <h3 class="text-lg font-bold text-white mb-2">${serv.nome}</h3>
+                                <h3 class="text-base font-bold text-white mb-2">${serv.nome}</h3>
                                 <p class="text-slate-400 text-xs leading-relaxed mb-6">${serv.desc}</p>
                             </div>
                             <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
-                                <span class="text-[10px] font-mono font-bold text-cyan-400">DESDE R$ ${serv.preco}</span>
+                                <span class="text-[10px] font-mono font-bold text-accent">DESDE R$ ${serv.preco}</span>
                                 <span class="text-[10px] text-slate-500 font-mono">${serv.badge || 'Ativo'}</span>
                             </div>
                         </div>
@@ -763,11 +975,11 @@
                 state.services.forEach((serv, idx) => {
                     const checked = (serv.preco == baseSelecionada || (idx === 0 && !baseSelecionada)) ? "checked" : "";
                     containerSimulador.innerHTML += `
-                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-cyan-500/30 transition-all select-none">
-                            <input type="radio" name="base-service" value="${serv.preco}" ${checked} class="absolute top-5 right-5 text-cyan-500 focus:ring-0" onclick="atualizarCalculo()">
-                            <span class="service-title font-bold text-slate-200 text-sm">${serv.nome}</span>
-                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed line-clamp-2">${serv.desc}</span>
-                            <span class="text-cyan-400 font-bold mt-4 font-mono text-sm">R$ ${serv.preco}</span>
+                        <label class="relative flex flex-col p-5 bg-brandDark border border-brandBorder rounded-2xl cursor-pointer hover:border-accent/30 transition-all select-none">
+                            <input type="radio" name="base-service" value="${serv.preco}" ${checked} class="absolute top-5 right-5 text-accent focus:ring-0" onclick="atualizarCalculo()">
+                            <span class="service-title font-bold text-slate-250 text-xs uppercase font-mono tracking-wider">${serv.nome}</span>
+                            <span class="text-[10px] text-slate-500 mt-2 leading-relaxed line-clamp-2">${serv.desc}</span>
+                            <span class="text-accent font-bold mt-4 font-mono text-sm">R$ ${serv.preco}</span>
                         </label>
                     `;
                 });
@@ -777,9 +989,9 @@
                 containerAdminList.innerHTML = "";
                 state.services.forEach(serv => {
                     containerAdminList.innerHTML += `
-                        <div class="flex items-center justify-between text-xs border-b border-slate-800/60 pb-2">
-                            <span class="text-slate-300 font-mono">${serv.nome} — R$ ${serv.preco}</span>
-                            <button onclick="deletarServico('${serv.id}')" class="text-red-400 hover:text-red-500 font-bold px-2 py-1 bg-red-950/20 border border-red-900/30 rounded text-[10px] uppercase font-mono transition-colors">Excluir</button>
+                        <div class="flex items-center justify-between text-xs bg-brandDark/40 border border-brandBorder p-3 rounded-xl">
+                            <span class="text-slate-300 font-mono">${serv.nome} — <strong class="text-accent">R$ ${serv.preco}</strong></span>
+                            <button onclick="deletarServico('${serv.id}')" class="text-red-400 hover:text-red-500 font-bold px-3 py-1 bg-red-950/20 border border-red-900/30 rounded-lg text-[10px] uppercase font-mono transition-colors">Excluir</button>
                         </div>
                     `;
                 });
@@ -788,7 +1000,6 @@
             atualizarCalculo();
         }
 
-        // Renderiza os administradores no painel de controle
         function renderizarAdmins() {
             const containerAdmins = document.getElementById('admin-users-list');
             if (!containerAdmins) return;
@@ -800,22 +1011,21 @@
                 const canDelete = !isMaster && !isCurrent;
 
                 containerAdmins.innerHTML += `
-                    <div class="flex items-center justify-between text-xs bg-brandDark/85 p-2 rounded border border-slate-800">
+                    <div class="flex items-center justify-between text-xs bg-brandDark/85 p-2 px-3 rounded-xl border border-brandBorder">
                         <span class="text-slate-300 font-mono flex items-center gap-1.5">
                             <i class="fa-solid ${isMaster ? 'fa-crown text-amber-500' : 'fa-user text-slate-500'} text-[10px]"></i>
-                            ${adm.user} ${isCurrent ? '<span class="text-[9px] text-cyan-500">(você)</span>' : ''}
+                            ${adm.user} ${isCurrent ? '<span class="text-[9px] text-accent font-bold">(você)</span>' : ''}
                         </span>
                         ${canDelete ? `
-                            <button onclick="deletarAdmin('${adm.user}')" class="text-red-400 hover:text-red-500 font-bold px-2 py-0.5 bg-red-950/20 border border-red-900/30 rounded text-[9px] uppercase font-mono transition-colors">Remover</button>
+                            <button onclick="deletarAdmin('${adm.user}')" class="text-red-400 hover:text-red-500 font-bold px-2.5 py-1 bg-red-950/20 border border-red-900/30 rounded-lg text-[9px] uppercase font-mono transition-colors">Remover</button>
                         ` : `
-                            <span class="text-[9px] text-slate-600 font-mono uppercase">Protegido</span>
+                            <span class="text-[9px] text-slate-650 font-mono uppercase">Protegido</span>
                         `}
                     </div>
                 `;
             });
         }
 
-        // Renderiza a lista de pedidos no admin para você gerenciar o status
         function renderizarPedidosAdmin() {
             const containerPedidos = document.getElementById('admin-orders-list');
             if (!containerPedidos) return;
@@ -823,7 +1033,7 @@
             if (state.orders.length === 0) {
                 containerPedidos.innerHTML = `
                     <tr>
-                        <td colspan="5" class="p-4 text-center text-slate-500 italic">Nenhuma simulação ou pedido recebido ainda.</td>
+                        <td colspan="5" class="p-4 text-center text-slate-500 italic font-mono">Nenhum pedido ou simulação recebido.</td>
                     </tr>
                 `;
                 return;
@@ -836,14 +1046,14 @@
                 if (order.status === 'Cancelado') badgeColor = "bg-red-500/10 text-red-400 border-red-500/20";
 
                 return `
-                    <tr class="hover:bg-slate-900/40 transition-colors">
+                    <tr class="hover:bg-slate-900/30 transition-colors">
                         <td class="p-3 font-bold text-slate-200">
                             ${order.cliente}
-                            <span class="block text-[9px] text-slate-500 font-normal mt-0.5">${order.data}</span>
+                            <span class="block text-[9px] text-slate-550 font-normal mt-0.5">${order.data}</span>
                         </td>
                         <td class="p-3 text-slate-400">
-                            <span class="text-cyan-400 font-bold">${order.servico}</span>
-                            <span class="block text-[10px] text-slate-500 truncate max-w-[220px]">${order.extras.join(', ') || 'Nenhum extra'}</span>
+                            <span class="text-accent font-bold">${order.servico}</span>
+                            <span class="block text-[10px] text-slate-500 truncate max-w-[180px]">${order.extras.join(', ') || 'Nenhum adicional'}</span>
                         </td>
                         <td class="p-3 text-emerald-400 font-bold">R$ ${order.total}</td>
                         <td class="p-3">
@@ -852,33 +1062,17 @@
                             </span>
                         </td>
                         <td class="p-3 text-right space-x-1 whitespace-nowrap">
-                            <button onclick="alterarStatusPedido('${order.id}', 'Confirmado')" class="p-1 bg-emerald-500/10 hover:bg-emerald-500 hover:text-brandDark border border-emerald-500/20 rounded text-[10px] text-emerald-400 transition-all" title="Confirmar"><i class="fa-solid fa-check"></i></button>
-                            <button onclick="alterarStatusPedido('${order.id}', 'Finalizado')" class="p-1 bg-cyan-500/10 hover:bg-cyan-500 hover:text-brandDark border border-cyan-500/20 rounded text-[10px] text-cyan-400 transition-all" title="Finalizar"><i class="fa-solid fa-flag-checkered"></i></button>
-                            <button onclick="alterarStatusPedido('${order.id}', 'Cancelado')" class="p-1 bg-red-500/10 hover:bg-red-500 hover:text-white border border-red-500/20 rounded text-[10px] text-red-400 transition-all" title="Cancelar"><i class="fa-solid fa-ban"></i></button>
-                            <button onclick="deletarPedido('${order.id}')" class="p-1 bg-slate-800 hover:bg-red-600 hover:text-white border border-slate-700 rounded text-[10px] text-slate-400 transition-all" title="Deletar permanentemente"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="alterarStatusPedido('${order.id}', 'Confirmado')" class="p-1 px-1.5 bg-emerald-500/10 hover:bg-emerald-500 hover:text-brandDark border border-emerald-500/20 rounded-lg text-[10px] text-emerald-400 transition-all" title="Confirmar"><i class="fa-solid fa-check"></i></button>
+                            <button onclick="alterarStatusPedido('${order.id}', 'Finalizado')" class="p-1 px-1.5 bg-cyan-500/10 hover:bg-cyan-500 hover:text-brandDark border border-cyan-500/20 rounded-lg text-[10px] text-cyan-400 transition-all" title="Finalizar"><i class="fa-solid fa-flag-checkered"></i></button>
+                            <button onclick="alterarStatusPedido('${order.id}', 'Cancelado')" class="p-1 px-1.5 bg-red-500/10 hover:bg-red-500 hover:text-white border border-red-500/20 rounded-lg text-[10px] text-red-400 transition-all" title="Cancelar"><i class="fa-solid fa-ban"></i></button>
+                            <button onclick="deletarPedido('${order.id}')" class="p-1 px-1.5 bg-slate-800 hover:bg-red-600 hover:text-white border border-slate-700 rounded-lg text-[10px] text-slate-400 transition-all" title="Excluir"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        // Altera status de uma O.S. de simulação
-        function alterarStatusPedido(id, novoStatus) {
-            state.orders = state.orders.map(o => o.id === id ? { ...o, status: novoStatus } : o);
-            localStorage.setItem('vitim_studio_orders', JSON.stringify(state.orders));
-            renderizarPedidosAdmin();
-            showToast(`Status alterado para: ${novoStatus}`);
-        }
-
-        // Remove um pedido da lista
-        function deletarPedido(id) {
-            state.orders = state.orders.filter(o => o.id !== id);
-            localStorage.setItem('vitim_studio_orders', JSON.stringify(state.orders));
-            renderizarPedidosAdmin();
-            showToast("Registro de pedido removido.");
-        }
-
-        // Calcula os valores do simulador dinamicamente
+        // CÁLCULOS DO ORÇAMENTO
         function atualizarCalculo() {
             let total = 0;
             const baseRadio = document.querySelector('input[name="base-service"]:checked');
@@ -900,136 +1094,189 @@
             if (totalVal) totalVal.innerText = `R$ ${total}`;
         }
 
-        // Abre modal de login
+        // STATUS DOS PEDIDOS
+        function alterarStatusPedido(id, novoStatus) {
+            state.orders = state.orders.map(o => o.id === id ? { ...o, status: novoStatus } : o);
+            localStorage.setItem('v_studio_orders', JSON.stringify(state.orders));
+            renderizarPedidosAdmin();
+            showToast(`Status atualizado para: ${novoStatus}`);
+        }
+
+        function deletarPedido(id) {
+            state.orders = state.orders.filter(o => o.id !== id);
+            localStorage.setItem('v_studio_orders', JSON.stringify(state.orders));
+            renderizarPedidosAdmin();
+            showToast("Registro de O.S. removido.");
+        }
+
+        // CONTROLE DOS MODAIS
         function abrirModalLogin() {
-            if (state.loggedInUser) {
-                // Se já estiver logado, vai direto para a seção administrativa
-                const sec = document.getElementById('admin-section');
-                sec.scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
+            fecharMoreMenu();
             document.getElementById('login-modal').classList.remove('hidden');
             document.getElementById('admin-user-inp').focus();
         }
 
-        // Fecha modal de login
         function fecharModalLogin() {
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('admin-user-inp').value = "";
             document.getElementById('admin-pass-inp').value = "";
+            document.getElementById('lgpd-check').checked = false;
             document.getElementById('admin-error-msg').classList.add('hidden');
         }
 
-        // Processa a validação de login
+        // MENU FLUTUANTE
+        function toggleMoreMenu() {
+            document.getElementById('more-menu').classList.toggle('hidden');
+        }
+
+        function fecharMoreMenu() {
+            document.getElementById('more-menu').classList.add('hidden');
+        }
+
+        // LOGIN E LOGOUT
         function processarLoginAdmin() {
             const userInp = document.getElementById('admin-user-inp').value.trim();
             const passInp = document.getElementById('admin-pass-inp').value;
+            const lgpdCheck = document.getElementById('lgpd-check').checked;
             const errMsg = document.getElementById('admin-error-msg');
 
-            // Higienização dos inputs
-            if (!verificarSegurancaDeInput(userInp, "Login User Input") || !verificarSegurancaDeInput(passInp, "Login Pass Input")) {
+            if (!lgpdCheck) {
+                errMsg.classList.remove('hidden');
+                errMsg.innerText = "Você precisa ler e aceitar os termos de uso (LGPD) para prosseguir.";
                 return;
             }
 
-            // Valida as credenciais na lista dinâmica
+            // Firewall ativo nos formulários de login
+            if (!verificarSegurancaDeInput(userInp, "Acesso Administrativo (User)") || !verificarSegurancaDeInput(passInp, "Acesso Administrativo (Password)")) {
+                return;
+            }
+
             const adminEncontrado = state.admins.find(adm => adm.user.toLowerCase() === userInp.toLowerCase() && adm.pass === passInp);
 
             if (adminEncontrado) {
                 state.loggedInUser = adminEncontrado.user;
                 fecharModalLogin();
                 verificarEstadoDeLoginUI();
-                showToast(`Bem-vindo de volta, ${adminEncontrado.user}!`);
+                showToast(`Bem-vindo, ${adminEncontrado.user}!`);
                 
-                // Preenche formulários com valores atuais
+                // Preencher inputs administrativos com dados locais
+                document.getElementById('edit-studio-badge').value = state.siteBadgeBrand;
+                document.getElementById('edit-studio-text').value = state.siteTextBrand;
                 document.getElementById('edit-hero-title').value = state.heroTitle;
                 document.getElementById('edit-hero-sub').value = state.heroSubtitle;
                 document.getElementById('edit-whatsapp').value = state.whatsappNumber;
+                document.getElementById('edit-accent-color').value = state.accentColor;
+                document.getElementById('edit-bg-style').value = state.bgStyle;
 
-                // Força scroll suave para a seção do Painel administrativo que agora está visível
-                setTimeout(() => {
-                    const sec = document.getElementById('admin-section');
-                    sec.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
+                // Transitar direto para a aba administrativa desbloqueada
+                switchTab('admin');
             } else {
                 errMsg.classList.remove('hidden');
+                errMsg.innerText = "Credenciais inválidas ou acesso não autorizado.";
             }
         }
 
-        // Verifica o estado de login para esconder/exibir elementos cruciais
         function verificarEstadoDeLoginUI() {
-            const navAdminContainer = document.getElementById('nav-admin-container');
-            const adminSection = document.getElementById('admin-section');
+            const navAdminTabContainer = document.getElementById('nav-admin-tab-container');
+            const mobileAdminBtnContainer = document.getElementById('mobile-admin-btn-container');
             const statusDot = document.getElementById('status-dot');
 
             if (state.loggedInUser) {
-                // Exibe aba "Admin" na barra de navegação pública
-                navAdminContainer.innerHTML = `
-                    <a href="#admin-section" class="text-cyan-400 hover:text-cyan-300 transition-colors font-bold border-b border-cyan-500/20 pb-0.5 tracking-wider uppercase">Admin</a>
+                // Injetar aba Admin no desktop
+                navAdminTabContainer.innerHTML = `
+                    <button onclick="switchTab('admin')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1 text-accent font-bold" id="tab-btn-admin">Admin</button>
                 `;
-                // Desbloqueia e exibe a seção administrativa
-                adminSection.classList.remove('hidden');
-                document.getElementById('admin-logged-name').innerText = state.loggedInUser;
+                // Injetar aba Admin no Mobile
+                mobileAdminBtnContainer.innerHTML = `
+                    <button onclick="switchTab('admin')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-bold text-accent" id="mobile-btn-admin">
+                        <i class="fa-solid fa-user-gear text-sm animate-pulse"></i>
+                        <span>Admin</span>
+                    </button>
+                `;
                 
-                // Atualiza status dot do rodapé
-                statusDot.classList.remove('bg-slate-800', 'border-slate-700');
-                statusDot.classList.add('bg-cyan-500', 'border-cyan-400', 'animate-pulse');
+                // Mudar status de login no rodapé
+                statusDot.classList.remove('bg-slate-800', 'border-slate-750');
+                statusDot.classList.add('bg-accent', 'border-accent', 'animate-pulse');
 
                 renderizarAdmins();
                 renderizarPedidosAdmin();
             } else {
-                // Remove aba "Admin" e oculta a seção administrativa do DOM
-                navAdminContainer.innerHTML = "";
-                adminSection.classList.add('hidden');
+                navAdminTabContainer.innerHTML = "";
+                mobileAdminBtnContainer.innerHTML = `
+                    <button onclick="abrirModalLogin()" class="flex flex-col items-center gap-1 text-[10px] font-medium">
+                        <i class="fa-solid fa-lock text-sm"></i>
+                        <span>Admin</span>
+                    </button>
+                `;
+                statusDot.classList.remove('bg-accent', 'border-accent', 'animate-pulse');
+                statusDot.classList.add('bg-slate-800', 'border-slate-750');
                 
-                // Atualiza status dot do rodapé
-                statusDot.classList.remove('bg-cyan-500', 'border-cyan-400', 'animate-pulse');
-                statusDot.classList.add('bg-slate-800', 'border-slate-700');
+                // Se deslogar estando na página de admin, volta pro Home
+                const targetView = document.getElementById('view-admin');
+                if (targetView && !targetView.classList.contains('hidden')) {
+                    switchTab('home');
+                }
             }
         }
 
-        // Logout administrativo
         function processarLogoutAdmin() {
             state.loggedInUser = null;
             verificarEstadoDeLoginUI();
             showToast("Acesso administrativo encerrado.");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            switchTab('home');
         }
 
-        // Salva informações gerais (Hero e número do WhatsApp)
+        // SALVAR CONFIGURAÇÕES GERAIS (Identidade e Hero)
         function salvarAlteracoesGerais() {
-            const novoTitle = document.getElementById('edit-hero-title').value;
-            const novoSub = document.getElementById('edit-hero-sub').value;
-            const novoWap = document.getElementById('edit-whatsapp').value.trim();
+            const badge = document.getElementById('edit-studio-badge').value.trim();
+            const textLogo = document.getElementById('edit-studio-text').value.trim();
+            const title = document.getElementById('edit-hero-title').value;
+            const sub = document.getElementById('edit-hero-sub').value;
+            const wap = document.getElementById('edit-whatsapp').value.trim();
+            const accent = document.getElementById('edit-accent-color').value;
+            const bg = document.getElementById('edit-bg-style').value;
 
-            if (!verificarSegurancaDeInput(novoTitle, "Hero Title Edit") || !verificarSegurancaDeInput(novoSub, "Hero Subtitle Edit") || !verificarSegurancaDeInput(novoWap, "WhatsApp Edit")) {
+            if (!verificarSegurancaDeInput(badge, "Studio Badge") || 
+                !verificarSegurancaDeInput(textLogo, "Studio Logo Text") || 
+                !verificarSegurancaDeInput(title, "Hero Title") || 
+                !verificarSegurancaDeInput(sub, "Hero Sub") || 
+                !verificarSegurancaDeInput(wap, "WhatsApp Number")) {
                 return;
             }
 
-            state.heroTitle = novoTitle;
-            state.heroSubtitle = novoSub;
-            state.whatsappNumber = novoWap;
+            state.siteBadgeBrand = badge;
+            state.siteTextBrand = textLogo;
+            state.heroTitle = title;
+            state.heroSubtitle = sub;
+            state.whatsappNumber = wap;
+            state.accentColor = accent;
+            state.bgStyle = bg;
 
-            localStorage.setItem('vitim_studio_title', novoTitle);
-            localStorage.setItem('vitim_studio_sub', novoSub);
-            localStorage.setItem('vitim_studio_whatsapp', novoWap);
+            localStorage.setItem('v_studio_badge', badge);
+            localStorage.setItem('v_studio_text', textLogo);
+            localStorage.setItem('v_studio_title', title);
+            localStorage.setItem('v_studio_sub', sub);
+            localStorage.setItem('v_studio_whatsapp', wap);
+            localStorage.setItem('v_studio_accent', accent);
+            localStorage.setItem('v_studio_bg', bg);
 
             applyState();
-            showToast("Alterações salvas e atualizadas com sucesso!");
+            showToast("Plataforma atualizada com sucesso!");
         }
 
-        // Adiciona novo serviço no catálogo
+        // GERENCIAR SERVIÇOS DO CATÁLOGO
         function adicionarNovoServico() {
             const nome = document.getElementById('add-serv-nome').value.trim();
             const preco = document.getElementById('add-serv-preco').value;
             const desc = document.getElementById('add-serv-desc').value.trim();
             const icone = document.getElementById('add-serv-icone').value;
 
-            if (!verificarSegurancaDeInput(nome, "Nome Novo Servico") || !verificarSegurancaDeInput(desc, "Descricao Novo Servico")) {
+            if (!nome || !preco || !desc) {
+                showToast("Por favor, preencha todos os campos do serviço.");
                 return;
             }
 
-            if (!nome || !preco || !desc) {
-                showToast("Por favor, preencha todos os campos do serviço.");
+            if (!verificarSegurancaDeInput(nome, "Novo Serviço (Nome)") || !verificarSegurancaDeInput(desc, "Novo Serviço (Descrição)")) {
                 return;
             }
 
@@ -1043,90 +1290,84 @@
             };
 
             state.services.push(novoServ);
-            localStorage.setItem('vitim_studio_services', JSON.stringify(state.services));
+            localStorage.setItem('v_studio_services', JSON.stringify(state.services));
 
-            // Reseta form
+            // Resetar Form
             document.getElementById('add-serv-nome').value = "";
             document.getElementById('add-serv-preco').value = "";
             document.getElementById('add-serv-desc').value = "";
 
             renderizarServicos();
-            showToast("Novo serviço publicado com sucesso!");
+            showToast("Serviço adicionado ao catálogo!");
         }
 
-        // Deleta serviço do catálogo
         function deletarServico(id) {
             state.services = state.services.filter(s => s.id !== id);
-            localStorage.setItem('vitim_studio_services', JSON.stringify(state.services));
+            localStorage.setItem('v_studio_services', JSON.stringify(state.services));
             renderizarServicos();
             showToast("Serviço removido do catálogo.");
         }
 
-        // Adiciona um Administrador extra no sistema
+        // GERENCIAR ADMINISTRADORES
         function adicionarNovoAdmin() {
-            const newUser = document.getElementById('add-admin-user').value.trim();
-            const newPass = document.getElementById('add-admin-pass').value;
+            const user = document.getElementById('add-admin-user').value.trim();
+            const pass = document.getElementById('add-admin-pass').value;
 
-            if (!newUser || !newPass) {
-                showToast("Preencha usuário e senha do novo admin.");
+            if (!user || !pass) {
+                showToast("Preencha usuário e senha do novo administrador.");
                 return;
             }
 
-            // Firewall nos inputs de criação
-            if (!verificarSegurancaDeInput(newUser, "Add Admin User") || !verificarSegurancaDeInput(newPass, "Add Admin Pass")) {
+            if (!verificarSegurancaDeInput(user, "Criar Admin (User)") || !verificarSegurancaDeInput(pass, "Criar Admin (Password)")) {
                 return;
             }
 
-            // Valida se o usuário já existe no sistema
-            const jaExiste = state.admins.some(adm => adm.user.toLowerCase() === newUser.toLowerCase());
+            const jaExiste = state.admins.some(adm => adm.user.toLowerCase() === user.toLowerCase());
             if (jaExiste) {
-                showToast("Esse nome de usuário de administrador já existe!");
+                showToast("Este usuário já possui permissões de administrador!");
                 return;
             }
 
-            state.admins.push({ user: newUser, pass: newPass });
-            localStorage.setItem('vitim_studio_admins', JSON.stringify(state.admins));
+            state.admins.push({ user: user, pass: pass });
+            localStorage.setItem('v_studio_admins', JSON.stringify(state.admins));
 
             document.getElementById('add-admin-user').value = "";
             document.getElementById('add-admin-pass').value = "";
 
             renderizarAdmins();
-            showToast(`Administrador "${newUser}" registrado com sucesso!`);
+            showToast(`Administrador "${user}" autorizado.`);
         }
 
-        // Remove um Administrador cadastrado
         function deletarAdmin(username) {
             if (username.toLowerCase() === "vitim") {
-                showToast("Ação Bloqueada: Não é possível remover o administrador mestre!");
+                showToast("Segurança: Não é possível remover o Administrador mestre.");
                 return;
             }
             if (state.loggedInUser && username.toLowerCase() === state.loggedInUser.toLowerCase()) {
-                showToast("Ação Bloqueada: Você não pode remover seu próprio acesso enquanto está logado!");
+                showToast("Segurança: Você não pode remover seu próprio acesso enquanto está logado.");
                 return;
             }
 
             state.admins = state.admins.filter(adm => adm.user.toLowerCase() !== username.toLowerCase());
-            localStorage.setItem('vitim_studio_admins', JSON.stringify(state.admins));
+            localStorage.setItem('v_studio_admins', JSON.stringify(state.admins));
 
             renderizarAdmins();
-            showToast(`Administrador "${username}" removido do sistema.`);
+            showToast(`Permissões do administrador "${username}" revogadas.`);
         }
 
-        // Compila o orçamento, salva no site e redireciona para o WhatsApp
+        // REDIRECIONADOR INTEGRADO WHATSAPP & SALVAMENTO AUTOMÁTICO DE PEDIDOS
         function enviarOrcamentoWhatsApp() {
             const baseRadio = document.querySelector('input[name="base-service"]:checked');
             if (!baseRadio) {
-                showToast("Selecione um serviço base antes de enviar!");
+                showToast("Selecione um serviço base no simulador.");
                 return;
             }
 
-            // Busca usando a classe específica de forma robusta
             const labelElement = baseRadio.closest('label');
             const serviceName = labelElement.querySelector('.service-title').innerText;
-            const clientName = document.getElementById('client-name').value.trim() || "Não Identificado";
+            const clientName = document.getElementById('client-name').value.trim() || "Consumidor Local";
 
-            // Proteção contra scripts em campos do simulador
-            if (!verificarSegurancaDeInput(clientName, "Nome Cliente Simulador")) {
+            if (!verificarSegurancaDeInput(clientName, "Simulador (Nome Cliente)")) {
                 return;
             }
 
@@ -1143,7 +1384,7 @@
             if (speed && speed.checked) { finalValue += parseInt(speed.value); extras.push("Otimização Mobile Extrema (+ R$ 100)"); }
             if (express && express.checked) { finalValue += parseInt(express.value); extras.push("Entrega Rápida 48h (+ R$ 200)"); }
 
-            // SALVA O PEDIDO NO BANCO DE DADOS LOCAL ANTES DE IR PRO ZAP!
+            // Salvar automaticamente como O.S. no banco local
             const novoPedido = {
                 id: 'ord-' + Date.now(),
                 cliente: clientName,
@@ -1155,11 +1396,11 @@
             };
 
             state.orders.push(novoPedido);
-            localStorage.setItem('vitim_studio_orders', JSON.stringify(state.orders));
+            localStorage.setItem('v_studio_orders', JSON.stringify(state.orders));
             renderizarPedidosAdmin();
 
-            // Estrutura o ticket em formato rígido de O.S. profissional para o Zap
-            let msg = `📋 *DEVSEC STUDIO — ORDEM DE SERVIÇO*\n`;
+            // Montar ticket no padrão O.S. profissional
+            let msg = `📋 *${state.siteBadgeBrand.toUpperCase()} ${state.siteTextBrand.toUpperCase()} — ORDEM DE SERVIÇO*\n`;
             msg += `----------------------------------------\n`;
             msg += `👤 *Cliente:* ${clientName}\n`;
             msg += `🛠️ *Serviço Base:* ${serviceName} (R$ ${baseRadio.value})\n`;
@@ -1170,14 +1411,18 @@
             msg += `💰 *VALOR FINAL:* R$ ${finalValue}\n`;
             msg += `⏱️ *PRAZO ESTIMADO:* ${express && express.checked ? '48 Horas (Prioritário)' : '4 a 6 Dias Úteis'}\n`;
             msg += `----------------------------------------\n\n`;
-            msg += `Olá Vitim, realizei a simulação do orçamento de segurança e performance e montei essa O.S. acima. Gostaria de dar o andamento na contratação!`;
+            msg += `📋 *AÇÕES DO ADMINISTRADOR (VITIM):*\n`;
+            msg += `[ ] CONFIRMAR PEDIDO (Aguardar 50% Entrada)\n`;
+            msg += `[ ] FINALIZAR PROJETO\n`;
+            msg += `[ ] CANCELAR PEDIDO\n\n`;
+            msg += `Olá Vitim, realizei a simulação de orçamento e montei a minha O.S. Gostaria de iniciar o desenvolvimento e acertar a entrada!`;
 
             const encodedText = encodeURIComponent(msg);
-            const cleanNum = state.whatsappNumber.replace(/\D/g, ''); // Garante que só vai números para a URL
+            const cleanNum = state.whatsappNumber.replace(/\D/g, '');
             window.open(`https://wa.me/${cleanNum}?text=${encodedText}`, '_blank');
         }
 
-        // Filtra os projetos do portfólio de forma animada
+        // COMPONENTES AUXILIARES
         function filtrarPortfolio(categoria) {
             const cards = document.querySelectorAll('.project-card');
             const botoes = {
@@ -1188,14 +1433,14 @@
 
             for (let key in botoes) {
                 if (botoes[key]) {
-                    botoes[key].classList.remove('bg-cyan-500', 'text-brandDark');
+                    botoes[key].classList.remove('bg-accent', 'text-brandDark');
                     botoes[key].classList.add('text-slate-400', 'hover:text-slate-200');
                 }
             }
 
             if (botoes[categoria]) {
                 botoes[categoria].classList.remove('text-slate-400', 'hover:text-slate-200');
-                botoes[categoria].classList.add('bg-cyan-500', 'text-brandDark');
+                botoes[categoria].classList.add('bg-accent', 'text-brandDark');
             }
 
             cards.forEach(card => {
@@ -1212,7 +1457,7 @@
 
         function abrirDetalhesProjeto(mensagem) {
             const modal = document.getElementById('modal-projeto');
-            document.getElementById('modal-projeto-texto').innerText = mensaje || mensagem;
+            document.getElementById('modal-projeto-texto').innerText = mensagem;
             modal.classList.remove('hidden');
         }
 
@@ -1227,7 +1472,15 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 3500);
         }
 
-        // Inicialização do Banco Local no carregamento da janela
+        // Fechar menus ao clicar fora
+        window.onclick = function(event) {
+            const moreMenu = document.getElementById('more-menu');
+            if (!event.target.closest('#more-menu') && !event.target.closest('button[onclick="toggleMoreMenu()"]')) {
+                moreMenu.classList.add('hidden');
+            }
+        }
+
+        // Inicialização
         window.onload = function() {
             initLocalStorage();
         }
