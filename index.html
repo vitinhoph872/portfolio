@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitim Studio — Desenvolvimento Web & Segurança Digital</title>
+    
+    <!-- Tailwind CSS para estilo rápido e sem sobrecarregar RAM -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fontes Premium de alta legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Ícones modernos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brandDark: '#030712', // Escuro ultra-profundo premium
+                        brandCard: '#0b1120', // Contraste sutil para os cards
+                        brandAccent: '#10b981', // Verde esmeralda vivo
+                        brandBlue: '#3b82f6',
+                        brandRed: '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+        }
+        /* Custom scrollbar super discreta */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+    </style>
+</head>
+<body class="text-slate-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
+
+    <!-- ALERTA DE ATIVAÇÃO DE FIREWALL (WAF DETECTOR) -->
+    <div id="firewall-alert" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-md bg-red-950/95 border-2 border-red-500 text-red-200 p-4 rounded-xl shadow-2xl backdrop-blur-md animate-bounce">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30 animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+            </div>
+            <div>
+                <h4 class="font-mono text-xs font-bold text-red-400 uppercase tracking-wider">FIREWALL VITIM DEVSEC (WAF)</h4>
+                <p class="text-[11px] mt-1 text-slate-300 leading-relaxed">
+                    Tentativa de invasão bloqueada! O sistema detectou comportamento nocivo de <span id="waf-attack-type" class="text-red-400 font-mono font-bold">SQL Injection/XSS</span>.
+                </p>
+                <div class="mt-2 text-[9px] font-mono bg-black/40 p-1 rounded text-red-300 border border-red-500/10">
+                    Ação: Requisição higienizada e descartada com sucesso.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICAÇÃO DO SISTEMA -->
+    <div id="sys-toast" class="hidden fixed bottom-6 right-6 z-[90] bg-slate-900 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="sys-toast-text">Ação executada com sucesso!</span>
+    </div>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <header class="fixed top-0 left-0 w-full bg-brandDark/85 backdrop-blur-md border-b border-slate-800/60 z-50 transition-all duration-300">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5 group">
+                <span class="font-mono text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-bold transition-all group-hover:bg-emerald-500/20">VITIM</span>
+                <span class="text-sm font-extrabold tracking-tight text-slate-200">STUDIO</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-6 text-[11px] font-semibold text-slate-400 tracking-wide uppercase">
+                <a href="#servicos" class="hover:text-emerald-400 transition-colors">Serviços</a>
+                <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Portfólio</a>
+                <a href="#simulador" class="hover:text-emerald-400 transition-colors">Simular Orçamento</a>
+                <a href="#sobre" class="hover:text-emerald-400 transition-colors">Sobre Mim</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-emerald-400 transition-colors p-2 rounded-lg bg-slate-900 border border-slate-800/80" title="Ativar Ferramenta de IA">
+                    <i class="fa-solid fa-code-merge text-emerald-400"></i>
+                    <span class="text-[10px] font-mono hidden sm:inline ml-1.5 font-bold tracking-wider">IA DECK</span>
+                </button>
+                <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 text-xs font-bold px-3 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-shield text-emerald-400"></i> Área do Cliente
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- APRESENTAÇÃO PRINCIPAL (HERO) -->
+    <section class="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 overflow-hidden">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f293710_1px,transparent_1px),linear-gradient(to_bottom,#1f293710_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-xs text-emerald-400 font-mono mb-6">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Disponível para novos projetos rápidos
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white">
+                Código limpo. Sem lixo. <br>
+                <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">Site veloz e blindado.</span>
+            </h1>
+            
+            <p class="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+                Eu não uso construtores de sites pesados que travam o celular do seu cliente. Desenvolvo páginas escritas à mão, ultra-rápidas e com defesas ativas contra invasões.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a href="#simulador" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-450 text-brandDark font-extrabold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm tracking-wide shadow-lg shadow-emerald-500/10">
+                    <i class="fa-solid fa-calculator mr-1.5"></i>Simular Valor na Hora
+                </a>
+                <a href="https://wa.me/5546991338923?text=E aí Vitim, tudo bem? Quero um orçamento de site." target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 font-bold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>Falar Comigo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAINEL DE CONTROLE DE IA DO VITIM (DECK SECRETO) -->
+    <section id="admin-panel" class="hidden bg-slate-950 border-y border-emerald-500/20 py-10 px-4 sm:px-6 transition-all duration-300">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 border-b border-slate-800/60 pb-5">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/5 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-emerald-400 font-mono tracking-wider">ENGINE DE PROMPTS — MEU SEGREDO</h3>
+                        <p class="text-xs text-slate-500">Copie as instruções otimizadas para enviar às IAs e agilizar o desenvolvimento dos trabalhos.</p>
+                    </div>
+                </div>
+                <button onclick="toggleAdminPanel()" class="text-slate-500 hover:text-slate-300 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Prompt 1 -->
+                <div class="bg-brandDark/50 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] text-emerald-400 font-bold">01. ENGINE FRONTEND</span>
+                        <h4 class="text-xs font-bold text-slate-200 mt-1 mb-2">Estrutura Limpa HTML / Tailwind</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">Instrução especialista para IA desenhar landing pages rápidas usando utilitários nativos e CDN.</p>
+                    </div>
+                    <button onclick="copyPrompt('prompt1')" class="mt-4 w-full py-2 bg-emerald-500/5 hover:bg-emerald-500 text-emerald-400 hover:text-brandDark text-[11px] font-bold rounded transition-all border border-emerald-500/10">
+                        <i class="fa-solid fa-copy mr-1"></i> Copiar Código da IA
+                    </button>
+                    <textarea id="prompt1" class="hidden">Aja como um programador sênior focado em performance mobile. Crie um arquivo index.html único. Use Tailwind CSS via CDN. O nicho do site é [Diga o Nicho]. Crie um design minimalista, com tema escuro (slate-950), bordas finas de 1px em slate-800, sem gradientes exagerados, fontes limpas e ícones elegantes. Certifique-se de que a estrutura seja totalmente responsiva para celulares.</textarea>
+                </div>
+
+                <!-- Prompt 2 -->
+                <div class="bg-brandDark/50 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] text-blue-400 font-bold">02. CYBER DEFENSE</span>
+                        <h4 class="text-xs font-bold text-slate-200 mt-1 mb-2">Auditoria Contra Scripts Invasivos</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">Solicita rotinas completas de higienização de inputs para blindar o backend e os formulários.</p>
+                    </div>
+                    <button onclick="copyPrompt('prompt2')" class="mt-4 w-full py-2 bg-blue-500/5 hover:bg-blue-600 text-blue-400 hover:text-white text-[11px] font-bold rounded transition-all border border-blue-500/10">
+                        <i class="fa-solid fa-copy mr-1"></i> Copiar Código de Defesa
+                    </button>
+                    <textarea id="prompt2" class="hidden">Aja como analista AppSec. Forneça exemplos práticos de como proteger campos de formulários em websites de ataques de XSS e injeção SQL no Frontend e no Backend usando Javascript puro (sanitização de caracteres, conversão de HTML tags e prepared statements).</textarea>
+                </div>
+
+                <!-- Prompt 3 -->
+                <div class="bg-brandDark/50 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <span class="font-mono text-[10px] text-purple-400 font-bold">03. PERFORMANCE TUNING</span>
+                        <h4 class="text-xs font-bold text-slate-200 mt-1 mb-2">Otimização de Carregamento 3G/4G</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">Manual para configurar carregamento assíncrono de mídia para celulares fracos.</p>
+                    </div>
+                    <button onclick="copyPrompt('prompt3')" class="mt-4 w-full py-2 bg-purple-500/5 hover:bg-purple-600 text-purple-400 hover:text-white text-[11px] font-bold rounded transition-all border border-purple-500/10">
+                        <i class="fa-solid fa-copy mr-1"></i> Copiar Guia de Speed
+                    </button>
+                    <textarea id="prompt3" class="hidden">Quais as melhores práticas modernas para otimização do Core Web Vitals (LCP, FID, CLS) em servidores leves? Forneça métodos práticos de compactação de imagens, técnicas de deferring de scripts de terceiros e como otimizar fontes sem atrasar o carregamento da tela inicial em conexões 3G.</textarea>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-900">
+        <div class="mb-14">
+            <span class="font-mono text-[10px] text-emerald-400 font-bold tracking-widest uppercase">SOLUÇÕES DE VALOR</span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Serviços que eu executo</h2>
+            <p class="text-sm text-slate-400 mt-1 max-w-lg">Foco exclusivo em construir sistemas eficientes que colocam dinheiro no bolso do cliente.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Bento Card 1 -->
+            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-emerald-500/30 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/5 flex items-center justify-center text-emerald-400 mb-6">
+                        <i class="fa-solid fa-cubes text-lg"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Desenvolvimento Frontend</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Páginas de altíssima conversão feitas sob medida. Nada de WordPress lento ou sistemas pesados.</p>
+                </div>
+                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
+                    <span class="text-[10px] font-mono font-bold text-emerald-400">DESDE R$ 350</span>
+                    <span class="text-[10px] text-slate-500 font-mono">100% Mobile</span>
+                </div>
+            </div>
+
+            <!-- Bento Card 2 -->
+            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-blue-500/30 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-lg bg-blue-500/5 flex items-center justify-center text-blue-400 mb-6">
+                        <i class="fa-solid fa-lock text-lg"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Auditoria & AppSec</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Análise profunda de segurança em formulários, APIs e conexões de sites para evitar roubos de dados.</p>
+                </div>
+                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
+                    <span class="text-[10px] font-mono font-bold text-blue-400">DESDE R$ 400</span>
+                    <span class="text-[10px] text-slate-500 font-mono">OWASP Top 10</span>
+                </div>
+            </div>
+
+            <!-- Bento Card 3 -->
+            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-purple-500/30 transition-all duration-300 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-lg bg-purple-500/5 flex items-center justify-center text-purple-400 mb-6">
+                        <i class="fa-solid fa-bolt text-lg"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Otimização Core Web Vitals</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Reduzimos o tamanho das suas imagens e scripts. Páginas que abrem instantaneamente em redes 3G fracas.</p>
+                </div>
+                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
+                    <span class="text-[10px] font-mono font-bold text-purple-400">DESDE R$ 200</span>
+                    <span class="text-[10px] text-slate-500 font-mono">Ultra Performance</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFÓLIO INTERATIVO -->
+    <section id="portfolio" class="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-900">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+                <span class="font-mono text-[10px] text-emerald-400 font-bold tracking-widest uppercase">TRABALHO REAL</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Casos de Sucesso</h2>
+                <p class="text-sm text-slate-400 mt-1">Clique nos botões de filtro abaixo para classificar meus trabalhos sob medida.</p>
+            </div>
+            
+            <!-- Abas do Filtro (Funcionando via JS) -->
+            <div class="flex gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800 max-w-max">
+                <button onclick="filtrarPortfolio('todos')" id="btn-todos" class="px-3 py-1.5 rounded text-xs font-bold transition-all bg-emerald-500 text-brandDark">Todos</button>
+                <button onclick="filtrarPortfolio('web')" id="btn-web" class="px-3 py-1.5 rounded text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Apenas Web</button>
+                <button onclick="filtrarPortfolio('security')" id="btn-security" class="px-3 py-1.5 rounded text-xs font-bold transition-all text-slate-400 hover:text-slate-200">Apenas Segurança</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="portfolio-container">
+            <!-- Projeto 1 (Web) -->
+            <div class="project-card bg-brandCard border border-slate-800/80 rounded-xl overflow-hidden group transition-all duration-300" data-category="web">
+                <div class="bg-slate-950 px-4 py-2 flex items-center gap-2 border-b border-slate-800/60">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/40"></span>
+                    <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">alphaclean.com.br</div>
+                </div>
+                <div class="p-6">
+                    <span class="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-500/5 px-2 py-0.5 rounded border border-emerald-500/10">WEB DEVELOPMENT</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-2">Landing Page Alpha Clean</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Desenvolvimento de uma página comercial inteira escrita do zero com foco em conversões rápidas de leads locais. Redução drástica do tamanho do site de 4.2MB para apenas 320KB.</p>
+                    <div class="flex items-center justify-between mt-6">
+                        <div class="flex gap-2">
+                            <span class="font-mono text-[9px] text-slate-400">#Tailwind</span>
+                            <span class="font-mono text-[9px] text-slate-400">#HTML5</span>
+                        </div>
+                        <button onclick="abrirDetalhesProjeto('Alpha Clean — Site focado em vendas e carregamento ultra otimizado com redução extrema de bundle de mídia.')" class="text-[11px] font-bold text-slate-300 hover:text-emerald-400 transition-colors flex items-center gap-1">
+                            Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projeto 2 (Security) -->
+            <div class="project-card bg-brandCard border border-slate-800/80 rounded-xl overflow-hidden group transition-all duration-300" data-category="security">
+                <div class="bg-slate-950 px-4 py-2 flex items-center gap-2 border-b border-slate-800/60">
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/40"></span>
+                    <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">auditoria-api.internal</div>
+                </div>
+                <div class="p-6">
+                    <span class="text-[9px] font-mono font-bold text-blue-400 bg-blue-500/5 px-2 py-0.5 rounded border border-blue-500/10">SECURITY DEFENSE</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-2">Blindagem de Painel de Clientes</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">Auditoria realizada em painel legado de e-commerce. Identificação de brechas de injeção direta de dados em inputs e correção imediata aplicando filtros avançados de validação.</p>
+                    <div class="flex items-center justify-between mt-6">
+                        <div class="flex gap-2">
+                            <span class="font-mono text-[9px] text-slate-400">#OWASP</span>
+                            <span class="font-mono text-[9px] text-slate-400">#Sanitization</span>
+                        </div>
+                        <button onclick="abrirDetalhesProjeto('Blindagem de Banco de Dados — Correção estrutural em formulários impedindo SQLi e tentativas de roubo de sessão.')" class="text-[11px] font-bold text-slate-300 hover:text-blue-400 transition-colors flex items-center gap-1">
+                            Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Janela de Detalhes Dinâmica -->
+        <div id="modal-projeto" class="hidden fixed inset-0 z-50 bg-brandDark/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-brandCard border border-slate-800 p-6 rounded-xl max-w-sm w-full">
+                <div class="flex justify-between items-start mb-4">
+                    <h4 class="font-bold text-white">Informações do Projeto</h4>
+                    <button onclick="fecharModalProjeto()" class="text-slate-500 hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p id="modal-projeto-texto" class="text-xs text-slate-400 leading-relaxed mb-6"></p>
+                <button onclick="fecharModalProjeto()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded">Entendido</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIMULADOR DE ORÇAMENTO INTERATIVO -->
+    <section id="simulador" class="py-20 bg-slate-950/60 border-y border-slate-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12">
+                <span class="font-mono text-[10px] text-emerald-400 font-bold tracking-widest uppercase">INVESTIMENTO TRANSPARENTE</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Simulador de Projeto Comercial</h2>
+                <p class="text-sm text-slate-400 mt-1">Marque os pacotes abaixo e tenha um valor exato estimado na hora para seu desenvolvimento.</p>
+            </div>
+
+            <div class="bg-brandCard border border-slate-800/80 rounded-2xl p-6 sm:p-10 shadow-xl">
+                <!-- Etapa 1 -->
+                <div class="mb-8">
+                    <label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest font-mono">1. Base do Serviço</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
+                            <input type="radio" name="base-service" value="350" checked class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
+                            <span class="font-bold text-slate-200 text-sm">Landing Page</span>
+                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Código focado em conversão e anúncios rápidos.</span>
+                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 350</span>
+                        </label>
+                        
+                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
+                            <input type="radio" name="base-service" value="650" class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
+                            <span class="font-bold text-slate-200 text-sm">Site Completo</span>
+                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Multi-páginas institucionais com arquitetura fluida.</span>
+                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 650</span>
+                        </label>
+                        
+                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
+                            <input type="radio" name="base-service" value="400" class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
+                            <span class="font-bold text-slate-200 text-sm">Auditoria Sec</span>
+                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Varredura e blindagem completa de scripts legados.</span>
+                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 400</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Etapa 2 -->
+                <div class="mb-10">
+                    <label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest font-mono">2. Otimizações Extras (Opcionais)</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-emerald-500/20 transition-all">
+                            <input type="checkbox" id="ext-seo" value="150" class="mt-1 rounded text-emerald-500 bg-brandDark border-slate-750 focus:ring-0" onclick="atualizarCalculo()">
+                            <div>
+                                <span class="font-bold text-xs text-slate-200">Indexação SEO Profissional (+ R$ 150)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Configuração de tags sitemap para indexação nativa no Google.</span>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-emerald-500/20 transition-all">
+                            <input type="checkbox" id="ext-firewall" value="180" class="mt-1 rounded text-emerald-500 bg-brandDark border-slate-750 focus:ring-0" onclick="atualizarCalculo()">
+                            <div>
+                                <span class="font-bold text-xs text-slate-200">Blindagem de Firewall (+ R$ 180)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Implementação de filtros de cabeçalho contra robôs maliciosos.</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-emerald-500/20 transition-all">
+                            <input type="checkbox" id="ext-speed" value="100" class="mt-1 rounded text-emerald-500 bg-brandDark border-slate-750 focus:ring-0" onclick="atualizarCalculo()">
+                            <div>
+                                <span class="font-bold text-xs text-slate-200">Compactação Web Mobile (+ R$ 100)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Imagens de carregamento assíncrono para celulares antigos.</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-4 p-4 bg-brandDark border border-slate-800 rounded-lg cursor-pointer hover:border-emerald-500/20 transition-all">
+                            <input type="checkbox" id="ext-express" value="200" class="mt-1 rounded text-emerald-500 bg-brandDark border-slate-750 focus:ring-0" onclick="atualizarCalculo()">
+                            <div>
+                                <span class="font-bold text-xs text-slate-200">Entrega Rápida 48h (+ R$ 200)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Designação de prioridade em fila de execução imediata.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Resultado -->
+                <div class="border-t border-slate-800/85 pt-8 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">Investimento Previsto</span>
+                        <div class="text-4xl md:text-5xl font-extrabold text-emerald-400 mt-1 font-mono" id="total-val">R$ 350</div>
+                        <span class="text-[10px] text-slate-500 block mt-2">Valores para desenvolvimento limpo, sem mensalidade oculta.</span>
+                    </div>
+
+                    <button onclick="enviarOrcamentoWhatsApp()" class="w-full md:w-auto bg-emerald-500 hover:bg-emerald-450 text-brandDark font-extrabold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.01] shadow-xl shadow-emerald-500/5 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Projeto Via WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUEM SOU EU (ME CHAMO VITIM) -->
+    <section id="sobre" class="py-20 px-4 sm:px-6 bg-[#02050c] border-t border-slate-900">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="w-32 h-32 rounded-xl bg-slate-900 border-2 border-emerald-500/30 flex-shrink-0 flex items-center justify-center text-slate-300 relative shadow-inner">
+                <i class="fa-solid fa-terminal text-4xl text-emerald-400"></i>
+                <div class="absolute -bottom-2 -right-2 bg-emerald-500/10 text-emerald-400 text-[10px] font-mono border border-emerald-500/20 px-1.5 py-0.5 rounded font-bold">Vitim</div>
+            </div>
+            <div>
+                <span class="font-mono text-[10px] text-emerald-400 font-bold tracking-widest uppercase">CONHEÇA QUEM PROGRAMA</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 mb-4 text-white">Me chamo Vitim</h2>
+                
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                    Muitos programadores começam com computadores caros e acabam entregando sites lentos e cheios de códigos pesados e desnecessários. Eu comecei do absoluto zero, estudando em uma máquina simples de apenas 2GB de RAM, e aprendi o maior segredo do desenvolvimento moderno: **eficiência pura**.
+                </p>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                    Quando cada megabyte e cada processo do processador contam, você aprende a escrever código de verdade. Especializei-me em desenvolver estruturas extremamente leves em HTML puro, Tailwind CSS e segurança defensiva de alto nível. Eu entrego páginas que carregam instantaneamente em qualquer celular fraco ou conexão móvel ruim.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-code text-emerald-400 text-xs"></i>
+                        <span class="text-xs text-slate-300 font-mono">Código Manual Puro</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-gauge-high text-emerald-400 text-xs"></i>
+                        <span class="text-xs text-slate-300 font-mono">0.3s Load Time</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-shield-virus text-emerald-400 text-xs"></i>
+                        <span class="text-xs text-slate-300 font-mono">OWASP Top 10</span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-microchip text-emerald-400 text-xs"></i>
+                        <span class="text-xs text-slate-300 font-mono">Otimização Extrema</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL DE LOGIN COM ÁREA DO CLIENTE REALISTA & SEGURA -->
+    <div id="modal-login" class="hidden fixed inset-0 z-[100] bg-brandDark/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-brandCard border border-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative transition-all duration-300">
+            <!-- Header do Modal -->
+            <div class="bg-slate-950 px-6 py-4 flex items-center justify-between border-b border-slate-900">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-emerald-400"></i>
+                    <h3 class="font-mono text-xs font-bold text-slate-200 tracking-widest uppercase">Portal de Acesso Seguro</h3>
+                </div>
+                <button onclick="closeLoginModal()" class="text-slate-500 hover:text-slate-300 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Formulário de Login Principal -->
+            <div id="login-form-container" class="p-6">
+                <p class="text-xs text-slate-400 leading-relaxed mb-6 font-light">
+                    Entre com suas credenciais de projeto para acompanhar relatórios de performance, status de segurança e andamento do desenvolvimento.
+                </p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1.5 font-bold">Identificação do Usuário</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3.5 text-slate-600 text-xs"><i class="fa-solid fa-user"></i></span>
+                            <input type="text" id="login-user" placeholder="Ex: cliente" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1.5 font-bold">Chave de Segurança (Senha)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3.5 text-slate-600 text-xs"><i class="fa-solid fa-key"></i></span>
+                            <input type="password" id="login-pass" placeholder="Ex: vitim123" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
+                        </div>
+                    </div>
+
+                    <!-- Mensagem de Erro de login -->
+                    <div id="login-error-msg" class="hidden text-red-400 font-mono text-[10px] bg-red-950/40 p-2.5 rounded border border-red-900/30">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Credenciais incorretas ou chave expirada.
+                    </div>
+
+                    <button onclick="handleLogin()" class="w-full bg-emerald-500 hover:bg-emerald-450 text-brandDark font-extrabold py-3 rounded-lg text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> Validar Acesso
+                    </button>
+                </div>
+
+                <div class="mt-6 border-t border-slate-900 pt-4 flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                    <span>STATUS WAF: <span class="text-emerald-500 font-bold">ATIVADO</span></span>
+                    <span>v2.1.2-Secure</span>
+                </div>
+            </div>
+
+            <!-- DASHBOARD DE CLIENTE EXCLUSIVO (Aparece após o login correto) -->
+            <div id="dashboard-container" class="hidden p-6 max-h-[80vh] overflow-y-auto">
+                <div class="flex items-center gap-2 mb-6 bg-emerald-500/5 p-3 rounded-xl border border-emerald-500/10">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-200 text-xs">Painel do Projeto Alpha Clean</h4>
+                        <span class="text-[9px] text-slate-500 font-mono">Contrato: #2026-042A</span>
+                    </div>
+                </div>
+
+                <!-- Estatísticas Ativas -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-brandDark p-3 rounded-xl border border-slate-850">
+                        <span class="text-[9px] font-mono text-slate-500 uppercase">Tempo de Resposta</span>
+                        <div class="text-base font-extrabold text-emerald-400 mt-1 font-mono">0.24s</div>
+                        <span class="text-[8px] text-emerald-500/80 font-mono block mt-1"><i class="fa-solid fa-caret-up"></i> Otm. Extrema</span>
+                    </div>
+                    <div class="bg-brandDark p-3 rounded-xl border border-slate-850">
+                        <span class="text-[9px] font-mono text-slate-500 uppercase">Varredura WAF</span>
+                        <div class="text-base font-extrabold text-blue-400 mt-1 font-mono">100% OK</div>
+                        <span class="text-[8px] text-blue-500/80 font-mono block mt-1"><i class="fa-solid fa-lock"></i> Sem brechas</span>
+                    </div>
+                </div>
+
+                <!-- Lista de Entregáveis -->
+                <div class="space-y-3.5 mb-6">
+                    <h5 class="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">Status das Atividades</h5>
+                    
+                    <div class="flex items-center justify-between text-xs border-b border-slate-900 pb-2">
+                        <span class="text-slate-300">Estrutura Mobile-First (HTML)</span>
+                        <span class="text-emerald-400 font-mono font-bold"><i class="fa-solid fa-circle-check"></i> Concluído</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs border-b border-slate-900 pb-2">
+                        <span class="text-slate-300">Otimização de Carregamento</span>
+                        <span class="text-emerald-400 font-mono font-bold"><i class="fa-solid fa-circle-check"></i> Concluído</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs border-b border-slate-900 pb-2">
+                        <span class="text-slate-300">Criptografia de Formulários (WAF)</span>
+                        <span class="text-emerald-400 font-mono font-bold"><i class="fa-solid fa-circle-check"></i> Concluído</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-300">Instalação de Certificado SSL</span>
+                        <span class="text-yellow-400 font-mono font-bold animate-pulse"><i class="fa-solid fa-circle-notch animate-spin"></i> Em andamento</span>
+                    </div>
+                </div>
+
+                <!-- Botões de Suporte do Painel -->
+                <div class="space-y-2">
+                    <a href="https://wa.me/5599999999999?text=E aí Vitim! Estou no meu dashboard e quero agendar a reunião de testes." target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-xs font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> Chamar Desenvolvedor no WhatsApp
+                    </a>
+                    <button onclick="handleLogout()" class="w-full text-slate-500 hover:text-red-400 font-mono text-[10px] uppercase tracking-wider py-1.5 transition-colors">
+                        <i class="fa-solid fa-power-off mr-1"></i> Desconectar Painel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-brandDark py-12 px-4 border-t border-slate-900">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-500">
+            <div class="flex items-center gap-3">
+                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-wider">VITIM STUDIO</span>
+                <span>© 2026. Todos os direitos reservados.</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-emerald-400 transition-colors">Voltar ao topo</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-emerald-500/70 font-mono flex items-center gap-1.5">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    Vitim On-Line
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- COMPORTAMENTO INTERATIVO DO SITE (JAVASCRIPT) -->
+    <script>
+        // ENGINE DE SEGURANÇA CONTRA INVASÕES (WAF FIREWALL)
+        function verificarSegurancaDeInput(texto) {
+            // Padrões maliciosos típicos de ataques XSS (injeção de scripts) ou SQL Injection (falsificar comandos)
+            const padroesAtaque = [
+                /<script/i,
+                /javascript:/i,
+                /onerror/i,
+                /onload/i,
+                /SELECT\s+.*FROM/i,
+                /UNION\s+SELECT/i,
+                /OR\s+['"]?\d+['"]?\s*=\s*['"]?\d+/i,
+                /--/
+            ];
+
+            for (let padrao of padroesAtaque) {
+                if (padrao.test(texto)) {
+                    return false; // Alerta de Segurança Detectado!
+                }
+            }
+            return true; // Entrada totalmente higienizada
+        }
+
+        // Exibe o Alerta Vermelho de bloqueio do Firewall
+        function dispararAlertaFirewall(tipo) {
+            const firewall = document.getElementById('firewall-alert');
+            const wafType = document.getElementById('waf-attack-type');
+            
+            wafType.innerText = tipo;
+            firewall.classList.remove('hidden');
+
+            // Oculta automaticamente após 5 segundos
+            setTimeout(() => {
+                firewall.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Realiza o cálculo dinâmico de orçamento
+        function atualizarCalculo() {
+            let total = 0;
+            
+            // Valor do Serviço Base
+            const radios = document.getElementsByName('base-service');
+            for (let r of radios) {
+                if (r.checked) {
+                    total += parseInt(r.value);
+                }
+            }
+
+            // Opcionais Extras
+            const seo = document.getElementById('ext-seo');
+            const firewall = document.getElementById('ext-firewall');
+            const speed = document.getElementById('ext-speed');
+            const express = document.getElementById('ext-express');
+
+            if (seo && seo.checked) total += parseInt(seo.value);
+            if (firewall && firewall.checked) total += parseInt(firewall.value);
+            if (speed && speed.checked) total += parseInt(speed.value);
+            if (express && express.checked) total += parseInt(express.value);
+
+            // Printa na tela com formatação
+            document.getElementById('total-val').innerText = `R$ ${total}`;
+        }
+
+        // Função do Filtro Real do Portfólio
+        function filtrarPortfolio(categoria) {
+            const cards = document.querySelectorAll('.project-card');
+            const botoes = {
+                todos: document.getElementById('btn-todos'),
+                web: document.getElementById('btn-web'),
+                security: document.getElementById('btn-security')
+            };
+
+            // Atualização visual dos botões de controle de filtro
+            for (let key in botoes) {
+                if (botoes[key]) {
+                    botoes[key].classList.remove('bg-emerald-500', 'text-brandDark');
+                    botoes[key].classList.add('text-slate-400', 'hover:text-slate-200');
+                }
+            }
+
+            // Ativa o botão selecionado
+            if (botoes[categoria]) {
+                botoes[categoria].classList.remove('text-slate-400', 'hover:text-slate-200');
+                botoes[categoria].classList.add('bg-emerald-500', 'text-brandDark');
+            }
+
+            // Filtro dinâmico dos elementos com animação leve
+            cards.forEach(card => {
+                const itemCat = card.getAttribute('data-category');
+                if (categoria === 'todos' || itemCat === categoria) {
+                    card.style.display = 'block';
+                    setTimeout(() => { card.style.opacity = '1'; }, 10);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => { card.style.display = 'none'; }, 200);
+                }
+            });
+        }
+
+        // Janela de detalhes do projeto
+        function abrirDetalhesProjeto(mensagem) {
+            const modal = document.getElementById('modal-projeto');
+            const modalTexto = document.getElementById('modal-projeto-texto');
+            
+            modalTexto.innerText = mensagem;
+            modal.classList.remove('hidden');
+        }
+
+        function fecharModalProjeto() {
+            document.getElementById('modal-projeto').classList.add('hidden');
+        }
+
+        // Modais de Login da Área do Cliente
+        function openLoginModal() {
+            document.getElementById('modal-login').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('modal-login').classList.add('hidden');
+        }
+
+        // LOGIN E CONEXÃO SEGURA
+        function handleLogin() {
+            const userInp = document.getElementById('login-user').value;
+            const passInp = document.getElementById('login-pass').value;
+            const errorMsg = document.getElementById('login-error-msg');
+
+            // 1. ANTES DE QUALQUER COISA: Varredura de Segurança do Firewall
+            if (!verificarSegurancaDeInput(userInp)) {
+                dispararAlertaFirewall("XSS / Script Injection");
+                return;
+            }
+            if (!verificarSegurancaDeInput(passInp)) {
+                dispararAlertaFirewall("SQL Injection (SQLi)");
+                return;
+            }
+
+            // 2. Validação padrão de credenciais
+            if (userInp === "cliente" && passInp === "vitim123") {
+                errorMsg.classList.add('hidden');
+                
+                // Transição do painel
+                document.getElementById('login-form-container').classList.add('hidden');
+                document.getElementById('dashboard-container').classList.remove('hidden');
+                
+                // Exibe mensagem rápida de sucesso
+                showToast("Conexão Segura Estabelecida!");
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('login-user').value = "";
+            document.getElementById('login-pass').value = "";
+            
+            document.getElementById('dashboard-container').classList.add('hidden');
+            document.getElementById('login-form-container').classList.remove('hidden');
+            showToast("Sessão finalizada com sucesso.");
+        }
+
+        // Toast de Informação do Sistema
+        function showToast(mensagem) {
+            const toast = document.getElementById('sys-toast');
+            document.getElementById('sys-toast-text').innerText = mensagem;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+        }
+
+        // Envio estruturado direto para WhatsApp
+        function enviarOrcamentoWhatsApp() {
+            const baseRadio = document.querySelector('input[name="base-service"]:checked');
+            const serviceName = baseRadio.closest('label').querySelector('.font-bold').innerText;
+            
+            let finalValue = parseInt(baseRadio.value);
+            let extras = [];
+
+            const seo = document.getElementById('ext-seo');
+            const firewall = document.getElementById('ext-firewall');
+            const speed = document.getElementById('ext-speed');
+            const express = document.getElementById('ext-express');
+
+            if (seo && seo.checked) { finalValue += parseInt(seo.value); extras.push("Otimização SEO"); }
+            if (firewall && firewall.checked) { finalValue += parseInt(firewall.value); extras.push("Firewall de Segurança"); }
+            if (speed && speed.checked) { finalValue += parseInt(speed.value); extras.push("Otimização Mobile"); }
+            if (express && express.checked) { finalValue += parseInt(express.value); extras.push("Entrega Expressa 48h"); }
+
+            let msg = `Fala Vitim! Simulei um pacote aqui no seu portfólio:\n\n`;
+            msg += `*Serviço:* ${serviceName}\n`;
+            if (extras.length > 0) {
+                msg += `*Adicionais:* ${extras.join(', ')}\n`;
+            }
+            msg += `*Preço estimado:* R$ ${finalValue}\n\n`;
+            msg += `Gostaria de agendar para tirarmos dúvidas e começar!`;
+
+            const encodedText = encodeURIComponent(msg);
+            
+            // 👉 Insira o seu número real aqui! (Com o DDI do Brasil que é 55 + DDD + Seu número)
+            const meuWhatsapp = "5599999999999"; 
+
+            window.open(`https://wa.me/${meuWhatsapp}?text=${encodedText}`, '_blank');
+        }
+
+        // Ativação rápida do painel de prompts do Vitim
+        function toggleAdminPanel() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden')) {
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Copiar os prompts para área de transferência
+        function copyPrompt(id) {
+            const textToCopy = document.getElementById(id).value;
+            
+            const inputTemp = document.createElement("textarea");
+            inputTemp.value = textToCopy;
+            document.body.appendChild(inputTemp);
+            inputTemp.select();
+            document.execCommand("copy");
+            document.body.removeChild(inputTemp);
+
+            showToast("PROMPT COPIADO COM SUCESSO!");
+        }
+
+        // Inicia o cálculo básico ao carregar
+        window.onload = function() {
+            atualizarCalculo();
+        }
+    </script>
+</body>
+</html>
