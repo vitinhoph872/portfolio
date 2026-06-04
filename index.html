@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,7 +60,7 @@
 <body class="text-slate-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
 
     <!-- ALERTA DE ATIVAÇÃO DE FIREWALL (WAF DETECTOR) -->
-    <div id="firewall-alert" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[90%] max-w-md bg-red-950/95 border-2 border-red-500 text-red-200 p-4 rounded-xl shadow-2xl backdrop-blur-md animate-bounce">
+    <div id="firewall-alert" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-[90%] max-w-md bg-red-950/95 border-2 border-red-500 text-red-200 p-4 rounded-xl shadow-2xl backdrop-blur-md animate-bounce">
         <div class="flex items-start gap-3">
             <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center text-red-400 border border-red-500/30 animate-pulse">
                 <i class="fa-solid fa-triangle-exclamation text-lg"></i>
@@ -71,14 +71,14 @@
                     Tentativa de invasão bloqueada! O sistema detectou comportamento nocivo de <span id="waf-attack-type" class="text-red-400 font-mono font-bold">SQL Injection/XSS</span>.
                 </p>
                 <div class="mt-2 text-[9px] font-mono bg-black/40 p-1 rounded text-red-300 border border-red-500/10">
-                    Ação: Requisição higienizada e descartada com sucesso.
+                    Ação: Requisição higienizada e descartada com sucesso para sua segurança.
                 </div>
             </div>
         </div>
     </div>
 
     <!-- NOTIFICAÇÃO DO SISTEMA -->
-    <div id="sys-toast" class="hidden fixed bottom-6 right-6 z-[90] bg-slate-900 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2">
+    <div id="sys-toast" class="hidden fixed bottom-6 right-6 z-[110] bg-slate-900 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-xl shadow-2xl font-mono text-xs flex items-center gap-2">
         <i class="fa-solid fa-circle-check text-emerald-400"></i>
         <span id="sys-toast-text">Ação executada com sucesso!</span>
     </div>
@@ -93,8 +93,8 @@
             
             <nav class="hidden md:flex items-center gap-6 text-[11px] font-semibold text-slate-400 tracking-wide uppercase">
                 <a href="#servicos" class="hover:text-emerald-400 transition-colors">Serviços</a>
-                <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Portfólio</a>
                 <a href="#simulador" class="hover:text-emerald-400 transition-colors">Simular Orçamento</a>
+                <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Portfólio</a>
                 <a href="#sobre" class="hover:text-emerald-400 transition-colors">Sobre Mim</a>
             </nav>
 
@@ -104,7 +104,7 @@
                     <span class="text-[10px] font-mono hidden sm:inline ml-1.5 font-bold tracking-wider">IA DECK</span>
                 </button>
                 <button onclick="openLoginModal()" class="bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 text-xs font-bold px-3 py-2 rounded-lg transition-all flex items-center gap-1.5">
-                    <i class="fa-solid fa-user-shield text-emerald-400"></i> Área do Cliente
+                    <i class="fa-solid fa-user-shield text-emerald-400"></i> Área Privada
                 </button>
             </div>
         </div>
@@ -137,7 +137,7 @@
                 <a href="#simulador" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-450 text-brandDark font-extrabold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm tracking-wide shadow-lg shadow-emerald-500/10">
                     <i class="fa-solid fa-calculator mr-1.5"></i>Simular Valor na Hora
                 </a>
-                <a href="https://wa.me/5546991338923?text=E aí Vitim, tudo bem? Quero um orçamento de site." target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 font-bold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm flex items-center justify-center gap-2">
+                <a id="hero-direct-whatsapp" href="https://wa.me/5599999999999?text=E aí Vitim, tudo bem? Quero um orçamento de site." target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-850 text-slate-200 border border-slate-800 font-bold px-6 py-3.5 rounded-lg transition-all duration-300 text-sm flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-emerald-400"></i>Falar Comigo
                 </a>
             </div>
@@ -205,7 +205,7 @@
         </div>
     </section>
 
-    <!-- SERVIÇOS -->
+    <!-- SERVIÇOS (Dinamizados via Javascript) -->
     <section id="servicos" class="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-900">
         <div class="mb-14">
             <span class="font-mono text-[10px] text-emerald-400 font-bold tracking-widest uppercase">SOLUÇÕES DE VALOR</span>
@@ -213,51 +213,8 @@
             <p class="text-sm text-slate-400 mt-1 max-w-lg">Foco exclusivo em construir sistemas eficientes que colocam dinheiro no bolso do cliente.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Bento Card 1 -->
-            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-emerald-500/30 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-10 h-10 rounded-lg bg-emerald-500/5 flex items-center justify-center text-emerald-400 mb-6">
-                        <i class="fa-solid fa-cubes text-lg"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Desenvolvimento Frontend</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Páginas de altíssima conversão feitas sob medida. Nada de WordPress lento ou sistemas pesados.</p>
-                </div>
-                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
-                    <span class="text-[10px] font-mono font-bold text-emerald-400">DESDE R$ 350</span>
-                    <span class="text-[10px] text-slate-500 font-mono">100% Mobile</span>
-                </div>
-            </div>
-
-            <!-- Bento Card 2 -->
-            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-blue-500/30 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-10 h-10 rounded-lg bg-blue-500/5 flex items-center justify-center text-blue-400 mb-6">
-                        <i class="fa-solid fa-lock text-lg"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Auditoria & AppSec</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Análise profunda de segurança em formulários, APIs e conexões de sites para evitar roubos de dados.</p>
-                </div>
-                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
-                    <span class="text-[10px] font-mono font-bold text-blue-400">DESDE R$ 400</span>
-                    <span class="text-[10px] text-slate-500 font-mono">OWASP Top 10</span>
-                </div>
-            </div>
-
-            <!-- Bento Card 3 -->
-            <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-purple-500/30 transition-all duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="w-10 h-10 rounded-lg bg-purple-500/5 flex items-center justify-center text-purple-400 mb-6">
-                        <i class="fa-solid fa-bolt text-lg"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Otimização Core Web Vitals</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-6">Reduzimos o tamanho das suas imagens e scripts. Páginas que abrem instantaneamente em redes 3G fracas.</p>
-                </div>
-                <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
-                    <span class="text-[10px] font-mono font-bold text-purple-400">DESDE R$ 200</span>
-                    <span class="text-[10px] text-slate-500 font-mono">Ultra Performance</span>
-                </div>
-            </div>
+        <div id="servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Gerado via Javascript dinamicamente -->
         </div>
     </section>
 
@@ -341,7 +298,7 @@
         </div>
     </section>
 
-    <!-- SIMULADOR DE ORÇAMENTO INTERATIVO -->
+    <!-- SIMULADOR DE ORÇAMENTO INTERATIVO (Dinamizado) -->
     <section id="simulador" class="py-20 bg-slate-950/60 border-y border-slate-900">
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-12">
@@ -354,27 +311,8 @@
                 <!-- Etapa 1 -->
                 <div class="mb-8">
                     <label class="block text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest font-mono">1. Base do Serviço</label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
-                            <input type="radio" name="base-service" value="350" checked class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
-                            <span class="font-bold text-slate-200 text-sm">Landing Page</span>
-                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Código focado em conversão e anúncios rápidos.</span>
-                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 350</span>
-                        </label>
-                        
-                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
-                            <input type="radio" name="base-service" value="650" class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
-                            <span class="font-bold text-slate-200 text-sm">Site Completo</span>
-                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Multi-páginas institucionais com arquitetura fluida.</span>
-                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 650</span>
-                        </label>
-                        
-                        <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
-                            <input type="radio" name="base-service" value="400" class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
-                            <span class="font-bold text-slate-200 text-sm">Auditoria Sec</span>
-                            <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">Varredura e blindagem completa de scripts legados.</span>
-                            <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ 400</span>
-                        </label>
+                    <div id="simulador-base-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Gerado via Javascript dinamicamente -->
                     </div>
                 </div>
 
@@ -472,7 +410,7 @@
         </div>
     </section>
 
-    <!-- MODAL DE LOGIN COM ÁREA DO CLIENTE REALISTA & SEGURA -->
+    <!-- MODAL DE LOGIN COM ÁREA REALISTA & SEGURA -->
     <div id="modal-login" class="hidden fixed inset-0 z-[100] bg-brandDark/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-brandCard border border-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative transition-all duration-300">
             <!-- Header do Modal -->
@@ -489,7 +427,7 @@
             <!-- Formulário de Login Principal -->
             <div id="login-form-container" class="p-6">
                 <p class="text-xs text-slate-400 leading-relaxed mb-6 font-light">
-                    Entre com suas credenciais de projeto para acompanhar relatórios de performance, status de segurança e andamento do desenvolvimento.
+                    Entre com suas credenciais de projeto para acompanhar relatórios de performance ou gerenciar serviços se for administrador.
                 </p>
 
                 <div class="space-y-4">
@@ -497,7 +435,7 @@
                         <label class="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1.5 font-bold">Identificação do Usuário</label>
                         <div class="relative">
                             <span class="absolute left-3 top-3.5 text-slate-600 text-xs"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" id="login-user" placeholder="Ex: cliente" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
+                            <input type="text" id="login-user" placeholder="Ex: joaozinho123" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
                         </div>
                     </div>
 
@@ -505,7 +443,7 @@
                         <label class="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1.5 font-bold">Chave de Segurança (Senha)</label>
                         <div class="relative">
                             <span class="absolute left-3 top-3.5 text-slate-600 text-xs"><i class="fa-solid fa-key"></i></span>
-                            <input type="password" id="login-pass" placeholder="Ex: vitim123" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
+                            <input type="password" id="login-pass" placeholder="Ex: 12345" class="w-full bg-brandDark border border-slate-800 rounded-lg py-3 pl-9 pr-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-all font-mono">
                         </div>
                     </div>
 
@@ -521,11 +459,11 @@
 
                 <div class="mt-6 border-t border-slate-900 pt-4 flex justify-between items-center text-[10px] text-slate-500 font-mono">
                     <span>STATUS WAF: <span class="text-emerald-500 font-bold">ATIVADO</span></span>
-                    <span>v2.1.2-Secure</span>
+                    <span>v2.2.0-Secure</span>
                 </div>
             </div>
 
-            <!-- DASHBOARD DE CLIENTE EXCLUSIVO (Aparece após o login correto) -->
+            <!-- DASHBOARD DE CLIENTE EXCLUSIVO -->
             <div id="dashboard-container" class="hidden p-6 max-h-[80vh] overflow-y-auto">
                 <div class="flex items-center gap-2 mb-6 bg-emerald-500/5 p-3 rounded-xl border border-emerald-500/10">
                     <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
@@ -575,11 +513,75 @@
 
                 <!-- Botões de Suporte do Painel -->
                 <div class="space-y-2">
-                    <a href="https://wa.me/5599999999999?text=E aí Vitim! Estou no meu dashboard e quero agendar a reunião de testes." target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-xs font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
+                    <a href="https://wa.me/5546991338923?text=E aí Vitim! Estou no meu dashboard e quero agendar a reunião de testes." target="_blank" class="w-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-xs font-bold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all">
                         <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> Chamar Desenvolvedor no WhatsApp
                     </a>
                     <button onclick="handleLogout()" class="w-full text-slate-500 hover:text-red-400 font-mono text-[10px] uppercase tracking-wider py-1.5 transition-colors">
                         <i class="fa-solid fa-power-off mr-1"></i> Desconectar Painel
+                    </button>
+                </div>
+            </div>
+
+            <!-- DASHBOARD DO ADMINISTRADOR (VITIM) -->
+            <div id="admin-dashboard-container" class="hidden p-6 max-h-[80vh] overflow-y-auto">
+                <div class="flex items-center gap-2 mb-6 bg-blue-500/5 p-3 rounded-xl border border-blue-500/10">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-200 text-xs">Painel do Administrador</h4>
+                        <span class="text-[9px] text-slate-500 font-mono">Seja bem-vindo, Vitim</span>
+                    </div>
+                </div>
+
+                <!-- Formulário de Adicionar Serviço -->
+                <div class="space-y-4 mb-6">
+                    <h5 class="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">Adicionar Novo Serviço</h5>
+                    
+                    <div>
+                        <label class="block text-[9px] font-mono text-slate-400 uppercase mb-1">Nome do Serviço</label>
+                        <input type="text" id="add-serv-nome" placeholder="Ex: App Android" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[9px] font-mono text-slate-400 uppercase mb-1">Preço Base (R$)</label>
+                            <input type="number" id="add-serv-preco" placeholder="350" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-mono text-slate-400 uppercase mb-1">Ícone</label>
+                            <select id="add-serv-icone" class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-all">
+                                <option value="fa-code">Código (Code)</option>
+                                <option value="fa-shield-halved">Escudo (Shield)</option>
+                                <option value="fa-bolt">Raio (Volt)</option>
+                                <option value="fa-database">Banco (Database)</option>
+                                <option value="fa-server">Servidor (Server)</option>
+                                <option value="fa-mobile-screen-button">Celular (Mobile)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[9px] font-mono text-slate-400 uppercase mb-1">Descrição Curta</label>
+                        <textarea id="add-serv-desc" rows="2" placeholder="O que o serviço faz..." class="w-full bg-brandDark border border-slate-800 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-all"></textarea>
+                    </div>
+
+                    <button onclick="adicionarNovoServico()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-extrabold py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Publicar Serviço
+                    </button>
+                </div>
+
+                <!-- Lista de Serviços Atuais para Exclusão -->
+                <div class="space-y-3.5 border-t border-slate-800 pt-4">
+                    <h5 class="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-bold">Serviços Ativos</h5>
+                    <div id="admin-services-list" class="space-y-2">
+                        <!-- Gerado via Javascript -->
+                    </div>
+                </div>
+
+                <div class="mt-6 border-t border-slate-900 pt-4">
+                    <button onclick="handleLogout()" class="w-full text-slate-500 hover:text-red-400 font-mono text-[10px] uppercase tracking-wider py-1.5 transition-colors">
+                        <i class="fa-solid fa-power-off mr-1"></i> Desconectar Admin
                     </button>
                 </div>
             </div>
@@ -606,9 +608,36 @@
 
     <!-- COMPORTAMENTO INTERATIVO DO SITE (JAVASCRIPT) -->
     <script>
+        // BANCO DE DADOS DE SERVIÇOS (Inicia com 3 padrões, Vitim pode adicionar mais)
+        let servicos = [
+            {
+                id: "frontend",
+                nome: "Desenvolvimento Frontend",
+                preco: 350,
+                desc: "Páginas de altíssima conversão feitas sob medida. Nada de WordPress lento ou sistemas pesados.",
+                icone: "fa-code",
+                badge: "100% Mobile"
+            },
+            {
+                id: "security",
+                nome: "Auditoria & AppSec",
+                preco: 400,
+                desc: "Análise profunda de segurança em formulários, APIs e conexões de sites para evitar roubos de dados.",
+                icone: "fa-shield-halved",
+                badge: "OWASP Top 10"
+            },
+            {
+                id: "speed",
+                nome: "Otimização Core Web Vitals",
+                preco: 200,
+                desc: "Reduzimos o tamanho das suas imagens e scripts. Páginas que abrem instantaneamente em redes 3G fracas.",
+                icone: "fa-bolt",
+                badge: "Ultra Performance"
+            }
+        ];
+
         // ENGINE DE SEGURANÇA CONTRA INVASÕES (WAF FIREWALL)
         function verificarSegurancaDeInput(texto) {
-            // Padrões maliciosos típicos de ataques XSS (injeção de scripts) ou SQL Injection (falsificar comandos)
             const padroesAtaque = [
                 /<script/i,
                 /javascript:/i,
@@ -636,17 +665,118 @@
             wafType.innerText = tipo;
             firewall.classList.remove('hidden');
 
-            // Oculta automaticamente após 5 segundos
             setTimeout(() => {
                 firewall.classList.add('hidden');
             }, 5000);
+        }
+
+        // Renderiza os serviços na seção pública e no simulador
+        function renderizarServicos() {
+            const containerPublico = document.getElementById('servicos-container');
+            const containerSimulador = document.getElementById('simulador-base-container');
+            const containerAdminList = document.getElementById('admin-services-list');
+
+            // 1. Render na seção pública
+            containerPublico.innerHTML = "";
+            servicos.forEach(serv => {
+                containerPublico.innerHTML += `
+                    <div class="bg-brandCard border border-slate-800/80 p-6 rounded-xl hover:border-emerald-500/30 transition-all duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/5 flex items-center justify-center text-emerald-400 mb-6">
+                                <i class="fa-solid ${serv.icone} text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-2">${serv.nome}</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-6">${serv.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-800/60 pt-4">
+                            <span class="text-[10px] font-mono font-bold text-emerald-400">DESDE R$ ${serv.preco}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${serv.badge || 'Ativo'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 2. Render no Simulador de Orçamento
+            // Guarda qual rádio estava marcado para não perder a seleção ao renderizar
+            const baseSelecionada = document.querySelector('input[name="base-service"]:checked')?.value || servicos[0].preco;
+            
+            containerSimulador.innerHTML = "";
+            servicos.forEach((serv, idx) => {
+                const checked = (serv.preco == baseSelecionada || (idx === 0 && !baseSelecionada)) ? "checked" : "";
+                containerSimulador.innerHTML += `
+                    <label class="relative flex flex-col p-5 bg-brandDark border border-slate-800 rounded-xl cursor-pointer hover:border-emerald-500/30 transition-all select-none">
+                        <input type="radio" name="base-service" value="${serv.preco}" ${checked} class="absolute top-5 right-5 text-emerald-500 focus:ring-0" onclick="atualizarCalculo()">
+                        <span class="font-bold text-slate-200 text-sm">${serv.nome}</span>
+                        <span class="text-[11px] text-slate-500 mt-2 leading-relaxed">${serv.desc}</span>
+                        <span class="text-emerald-400 font-bold mt-4 font-mono text-sm">R$ ${serv.preco}</span>
+                    </label>
+                `;
+            });
+
+            // 3. Render na lista de exclusão do Admin
+            containerAdminList.innerHTML = "";
+            servicos.forEach(serv => {
+                containerAdminList.innerHTML += `
+                    <div class="flex items-center justify-between text-xs border-b border-slate-900 pb-2">
+                        <span class="text-slate-300 font-mono">${serv.nome} - R$ ${serv.preco}</span>
+                        <button onclick="deletarServico('${serv.id}')" class="text-red-400 hover:text-red-500 font-bold px-2 py-1 bg-red-950/20 border border-red-900/30 rounded text-[10px] uppercase font-mono">Excluir</button>
+                    </div>
+                `;
+            });
+
+            atualizarCalculo();
+        }
+
+        // Adiciona novo serviço (Ação do Admin Vitim)
+        function adicionarNovoServico() {
+            const nomeInp = document.getElementById('add-serv-nome').value;
+            const precoInp = document.getElementById('add-serv-preco').value;
+            const descInp = document.getElementById('add-serv-desc').value;
+            const iconeInp = document.getElementById('add-serv-icone').value;
+
+            // Segurança anti-invasão
+            if (!verificarSegurancaDeInput(nomeInp) || !verificarSegurancaDeInput(descInp)) {
+                dispararAlertaFirewall("Script Injetado em Cadastro");
+                return;
+            }
+
+            if (!nomeInp || !precoInp || !descInp) {
+                showToast("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            const novoServ = {
+                id: 'serv-' + Date.now(),
+                nome: nomeInp,
+                preco: parseInt(precoInp),
+                desc: descInp,
+                icone: iconeInp,
+                badge: "Customizado"
+            };
+
+            servicos.push(novoServ);
+            
+            // Limpa formulário
+            document.getElementById('add-serv-nome').value = "";
+            document.getElementById('add-serv-preco').value = "";
+            document.getElementById('add-serv-desc').value = "";
+
+            renderizarServicos();
+            showToast("Novo serviço publicado com sucesso!");
+        }
+
+        // Deleta serviço cadastrado
+        function deletarServico(id) {
+            servicos = servicos.filter(s => s.id !== id);
+            renderizarServicos();
+            showToast("Serviço deletado pelo administrador.");
         }
 
         // Realiza o cálculo dinâmico de orçamento
         function atualizarCalculo() {
             let total = 0;
             
-            // Valor do Serviço Base
+            // Valor do Serviço Base selecionado no Simulador
             const radios = document.getElementsByName('base-service');
             for (let r of radios) {
                 if (r.checked) {
@@ -678,7 +808,6 @@
                 security: document.getElementById('btn-security')
             };
 
-            // Atualização visual dos botões de controle de filtro
             for (let key in botoes) {
                 if (botoes[key]) {
                     botoes[key].classList.remove('bg-emerald-500', 'text-brandDark');
@@ -686,13 +815,11 @@
                 }
             }
 
-            // Ativa o botão selecionado
             if (botoes[categoria]) {
                 botoes[categoria].classList.remove('text-slate-400', 'hover:text-slate-200');
                 botoes[categoria].classList.add('bg-emerald-500', 'text-brandDark');
             }
 
-            // Filtro dinâmico dos elementos com animação leve
             cards.forEach(card => {
                 const itemCat = card.getAttribute('data-category');
                 if (categoria === 'todos' || itemCat === categoria) {
@@ -727,13 +854,13 @@
             document.getElementById('modal-login').classList.add('hidden');
         }
 
-        // LOGIN E CONEXÃO SEGURA
+        // LOGIN E CONEXÃO SEGURA (Com suporte ao Admin Vitim)
         function handleLogin() {
             const userInp = document.getElementById('login-user').value;
             const passInp = document.getElementById('login-pass').value;
             const errorMsg = document.getElementById('login-error-msg');
 
-            // 1. ANTES DE QUALQUER COISA: Varredura de Segurança do Firewall
+            // 1. Varredura de Segurança do Firewall
             if (!verificarSegurancaDeInput(userInp)) {
                 dispararAlertaFirewall("XSS / Script Injection");
                 return;
@@ -743,15 +870,26 @@
                 return;
             }
 
-            // 2. Validação padrão de credenciais
-            if (userInp === "cliente" && passInp === "vitim123") {
+            // 2. Validação de credenciais de Admin (Vitim)
+            if (userInp === "Vitim" && passInp === "Eumermo99kk") {
                 errorMsg.classList.add('hidden');
                 
-                // Transição do painel
+                // Abre Dashboard do Admin
                 document.getElementById('login-form-container').classList.add('hidden');
+                document.getElementById('dashboard-container').classList.add('hidden');
+                document.getElementById('admin-dashboard-container').classList.remove('hidden');
+                
+                showToast("Conexão Administrativa Estabelecida!");
+            }
+            // 3. Validação padrão de credenciais de Cliente
+            else if (userInp === "cliente" && passInp === "vitim123") {
+                errorMsg.classList.add('hidden');
+                
+                // Abre Dashboard do Cliente
+                document.getElementById('login-form-container').classList.add('hidden');
+                document.getElementById('admin-dashboard-container').classList.add('hidden');
                 document.getElementById('dashboard-container').classList.remove('hidden');
                 
-                // Exibe mensagem rápida de sucesso
                 showToast("Conexão Segura Estabelecida!");
             } else {
                 errorMsg.classList.remove('hidden');
@@ -763,6 +901,7 @@
             document.getElementById('login-pass').value = "";
             
             document.getElementById('dashboard-container').classList.add('hidden');
+            document.getElementById('admin-dashboard-container').classList.add('hidden');
             document.getElementById('login-form-container').classList.remove('hidden');
             showToast("Sessão finalizada com sucesso.");
         }
@@ -775,9 +914,13 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 3000);
         }
 
-        // Envio estruturado direto para WhatsApp
+        // Envio estruturado direto para WhatsApp (Sem permitir que a mensagem vá em branco)
         function enviarOrcamentoWhatsApp() {
             const baseRadio = document.querySelector('input[name="base-service"]:checked');
+            if(!baseRadio) {
+                showToast("Erro: Selecione um serviço base primeiro.");
+                return;
+            }
             const serviceName = baseRadio.closest('label').querySelector('.font-bold').innerText;
             
             let finalValue = parseInt(baseRadio.value);
@@ -803,9 +946,10 @@
 
             const encodedText = encodeURIComponent(msg);
             
-            // 👉 Insira o seu número real aqui! (Com o DDI do Brasil que é 55 + DDD + Seu número)
-            const meuWhatsapp = "5599999999999"; 
+            // Seu número real aqui! (Com o DDI do Brasil que é 55 + DDD + Seu número)
+            const meuWhatsapp = "5546991338923"; 
 
+            // Redireciona diretamente e sem delay com os dados formatados
             window.open(`https://wa.me/${meuWhatsapp}?text=${encodedText}`, '_blank');
         }
 
@@ -832,9 +976,9 @@
             showToast("PROMPT COPIADO COM SUCESSO!");
         }
 
-        // Inicia o cálculo básico ao carregar
+        // Inicia o render básico ao carregar
         window.onload = function() {
-            atualizarCalculo();
+            renderizarServicos();
         }
     </script>
 </body>
