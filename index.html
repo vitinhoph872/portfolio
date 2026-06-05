@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-browser-title">Vitim Studio — Soluções Web & Defesa Digital</title>
+    <title id="site-browser-title">AlphaWeb — Sistemas Corporativos de Elite & Defesa Digital</title>
     
     <!-- Tailwind CSS para design responsivo de alta velocidade -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,22 +25,21 @@
                         mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        brandDark: '#030712', // Ultra escuro elegante
-                        brandCard: '#0f172a', // Contraste suave para blocos
-                        brandBorder: '#1e293b' // Bordas discretas
+                        brandDark: '#03060F', // Ultra escuro de luxo
+                        brandCard: '#090F1B', // Contraste suave para blocos de alta qualidade
+                        brandBorder: '#1A2436' // Bordas discretas metálicas
                     }
                 }
             }
         }
     </script>
 
-    <!-- ESTILOS DO TEMA DINÂMICO (Atualizados via Javascript) -->
     <style id="dynamic-theme">
         :root {
-            --accent: #06b6d4;
-            --accent-hover: #0891b2;
-            --accent-glow: rgba(6, 182, 212, 0.15);
-            --bg-style: #020617;
+            --accent: #FF6B00;
+            --accent-hover: #E05E00;
+            --accent-glow: rgba(255, 107, 0, 0.15);
+            --bg-style: #05080E;
         }
 
         body {
@@ -57,15 +56,15 @@
         .focus\:border-accent:focus { border-color: var(--accent) !important; }
         .accent-glow { box-shadow: 0 0 25px var(--accent-glow); }
         
-        /* Custom scrollbar para rodar liso em PC de 2GB */
+        /* Custom scrollbar para rodar perfeitamente */
         ::-webkit-scrollbar {
             width: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: #030712;
+            background: #03060F;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #1A2436;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -73,7 +72,7 @@
         }
     </style>
 </head>
-<body class="text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-300 min-h-screen flex flex-col justify-between">
+<body class="text-slate-100 antialiased selection:bg-orange-500/30 selection:text-orange-300 min-h-screen flex flex-col justify-between">
 
     <!-- ALERTA DO FIREWALL (WAF DETECTOR) -->
     <div id="firewall-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-[250] w-[90%] max-w-lg bg-red-950/95 border-2 border-red-500 text-red-200 p-5 rounded-2xl shadow-2xl backdrop-blur-md animate-bounce">
@@ -82,12 +81,12 @@
                 <i class="fa-solid fa-shield-virus text-2xl animate-pulse"></i>
             </div>
             <div>
-                <h4 class="font-mono text-xs font-bold text-red-400 uppercase tracking-wider">FIREWALL VITIM DEVSEC (WAF Active)</h4>
+                <h4 class="font-mono text-xs font-bold text-red-400 uppercase tracking-wider">FIREWALL ALPHA DEVSEC (WAF Active)</h4>
                 <p class="text-xs mt-1 text-slate-300 leading-relaxed">
                     Ação maliciosa barrada! Tentativa de injeção de script detectada em: <span id="waf-attack-type" class="text-red-400 font-mono font-bold">Injeção detectada</span>.
                 </p>
                 <div class="mt-3 text-[10px] font-mono bg-black/50 p-2 rounded border border-red-500/20">
-                    Origem: Input Sanitized & Logged. Sistema seguro.
+                    Origem: Input Sanitized & Logged. Sistema AlphaWeb seguro.
                 </div>
             </div>
         </div>
@@ -100,21 +99,21 @@
     </div>
 
     <!-- MODAL DE LOGIN COM TERMOS DE PRIVACIDADE (LGPD) -->
-    <div id="login-modal" class="hidden fixed inset-0 z-[200] bg-brandDark/90 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-brandCard border border-brandBorder p-8 rounded-3xl shadow-2xl relative">
+    <div id="login-modal" class="hidden fixed inset-0 z-[200] bg-brandDark/90 backdrop-blur-sm flex items-center justify-center p-4" onclick="fecharModalLoginSeForFora(event)">
+        <div id="login-modal-content" class="max-w-md w-full bg-brandCard border border-brandBorder p-8 rounded-3xl shadow-2xl relative">
             <button onclick="fecharModalLogin()" class="absolute top-5 right-5 text-slate-500 hover:text-slate-300 transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
             
             <div class="flex flex-col items-center text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-accent flex items-center justify-center mb-3">
+                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-accent flex items-center justify-center mb-3">
                     <i class="fa-solid fa-lock text-xl"></i>
                 </div>
-                <h3 class="font-bold text-lg text-slate-100">Área Administrativa</h3>
-                <p class="text-xs text-slate-400 mt-1">Insira suas credenciais para gerenciar a plataforma.</p>
+                <h3 class="font-bold text-lg text-slate-100">Portal Administrativo</h3>
+                <p class="text-xs text-slate-400 mt-1">Insira suas credenciais da agência AlphaWeb.</p>
             </div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Usuário</label>
+                    <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1.5 font-bold">Usuário Administrador</label>
                     <input type="text" id="admin-user-inp" placeholder="Digite seu usuário" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 focus:outline-none focus:border-accent font-mono transition-all">
                 </div>
                 <div>
@@ -125,7 +124,7 @@
                 <!-- Termos de Aceite LGPD -->
                 <div class="bg-brandDark/50 p-3 rounded-xl border border-brandBorder">
                     <label class="flex items-start gap-2.5 cursor-pointer select-none">
-                        <input type="checkbox" id="lgpd-check" class="mt-0.5 rounded text-cyan-500 bg-brandDark border-brandBorder focus:ring-0">
+                        <input type="checkbox" id="lgpd-check" class="mt-0.5 rounded text-orange-500 bg-brandDark border-brandBorder focus:ring-0">
                         <span class="text-[10px] text-slate-400 leading-relaxed">
                             Li e aceito os <strong>Termos de Uso</strong> e <strong>Políticas de Privacidade (LGPD)</strong>. Autorizo o processamento temporário de credenciais de login.
                         </span>
@@ -148,11 +147,11 @@
     <div id="more-menu" class="hidden fixed top-20 right-6 z-[100] w-64 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-md p-4 animate-fade-in">
         <h4 class="text-[10px] font-mono text-slate-500 uppercase mb-3 tracking-wider">Ações do Sistema</h4>
         <div class="space-y-1">
-            <button onclick="simularAtaqueFirewall()" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center justify-between text-red-400 transition-colors">
+            <button onclick="simularAtaqueFirewall(event)" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center justify-between text-red-400 transition-colors">
                 <span><i class="fa-solid fa-bug mr-2 text-red-400"></i>Testar Firewall WAF</span>
                 <span class="text-[9px] font-mono bg-red-950 px-1.5 py-0.5 rounded border border-red-800/40">Demo</span>
             </button>
-            <button onclick="abrirModalLogin()" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center gap-2 text-slate-300 transition-colors">
+            <button onclick="abrirModalLogin(event)" class="w-full text-left py-2 px-3 hover:bg-slate-800/80 rounded-lg text-xs flex items-center gap-2 text-slate-300 transition-colors">
                 <i class="fa-solid fa-user-shield text-slate-400"></i>Área Privada (Admin)
             </button>
             <div class="border-t border-slate-800 my-2 pt-2 text-[10px] font-mono text-slate-500 space-y-1">
@@ -162,7 +161,7 @@
                 </div>
                 <div class="flex justify-between px-3">
                     <span>Servidor Status</span>
-                    <span class="text-emerald-400 font-bold">Vitim Online</span>
+                    <span class="text-emerald-400 font-bold">Alpha Online</span>
                 </div>
             </div>
         </div>
@@ -172,33 +171,34 @@
     <header class="fixed top-0 left-0 w-full bg-brandDark/85 backdrop-blur-md border-b border-brandBorder z-50 transition-all duration-300">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="#" onclick="switchTab('home')" class="flex items-center gap-2.5">
-                <span class="font-mono text-[10px] bg-accent/10 text-accent border border-accent/20 px-2.5 py-0.5 rounded font-bold" id="site-badge-brand">VITIM</span>
-                <span class="text-sm font-extrabold tracking-tight text-slate-200" id="site-text-brand">STUDIO</span>
+                <!-- Fallback de renderização da logo premium AlphaWeb -->
+                <img id="header-logo-img" src="logo-alphaweb-perfil.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/101118/FF6B00?text=AW'" class="w-8 h-8 rounded-lg border border-orange-500/30 object-cover">
+                <span class="font-mono text-[10px] bg-accent/10 text-accent border border-accent/20 px-2.5 py-0.5 rounded font-bold" id="site-badge-brand">ALPHA</span>
+                <span class="text-sm font-extrabold tracking-tight text-slate-200" id="site-text-brand">WEB</span>
             </a>
             
             <!-- Links do Menu Desktop (Alternam abas ao invés de pular rolagem) -->
             <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-400 tracking-wider uppercase">
                 <button onclick="switchTab('home')" class="nav-tab-btn active hover:text-slate-200 transition-colors py-1" id="tab-btn-home">Início</button>
-                <button onclick="switchTab('servicos')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-servicos">Serviços</button>
-                <button onclick="switchTab('simulador')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-simulador">Fazer Orçamento</button>
+                <button onclick="switchTab('servicos')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-servicos">Soluções</button>
+                <button onclick="switchTab('simulador')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-simulador">Orçamento</button>
                 <button onclick="switchTab('portfolio')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-portfolio">Portfólio</button>
-                <button onclick="switchTab('sobre')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-sobre">Sobre Vitim</button>
-                <!-- Seção secreta de Admin: injetada via JS apenas se logado -->
+                <button onclick="switchTab('sobre')" class="nav-tab-btn hover:text-slate-200 transition-colors py-1" id="tab-btn-sobre">Sobre Nós</button>
                 <span id="nav-admin-tab-container"></span>
             </nav>
 
             <div class="flex items-center gap-3">
-                <button onclick="toggleMoreMenu()" class="text-slate-400 hover:text-slate-200 transition-colors p-2.5 rounded-xl hover:bg-slate-900/60" title="Mais Opções">
+                <button id="more-menu-btn" onclick="toggleMoreMenu(event)" class="text-slate-400 hover:text-slate-200 transition-colors p-2.5 rounded-xl hover:bg-slate-900/60" title="Mais Opções">
                     <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
                 </button>
-                <button onclick="switchTab('simulador')" class="hidden sm:flex bg-slate-900 hover:bg-slate-800 text-accent border border-slate-800 hover:border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all items-center gap-1.5 shadow-lg shadow-cyan-500/5">
-                    <i class="fa-solid fa-calculator"></i> Simular Valor
+                <button onclick="switchTab('simulador')" class="hidden sm:flex bg-slate-900 hover:bg-slate-800 text-accent border border-slate-800 hover:border-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl transition-all items-center gap-1.5 shadow-lg shadow-orange-500/5">
+                    <i class="fa-solid fa-calculator"></i> Simular Projeto
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- NAVEGAÇÃO MOBILE INFERIOR (Estilo App Nativo) -->
+    <!-- NAVEGAÇÃO MOBILE INFERIOR -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full bg-brandDark/95 border-t border-brandBorder z-50 backdrop-blur-md py-2 px-4 flex items-center justify-around text-slate-400">
         <button onclick="switchTab('home')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-home">
             <i class="fa-solid fa-house text-sm"></i>
@@ -206,7 +206,7 @@
         </button>
         <button onclick="switchTab('servicos')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-servicos">
             <i class="fa-solid fa-laptop-code text-sm"></i>
-            <span>Serviços</span>
+            <span>Soluções</span>
         </button>
         <button onclick="switchTab('simulador')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-simulador">
             <i class="fa-solid fa-calculator text-sm"></i>
@@ -214,48 +214,45 @@
         </button>
         <button onclick="switchTab('portfolio')" class="mobile-tab-btn flex flex-col items-center gap-1 text-[10px] font-medium" id="mobile-btn-portfolio">
             <i class="fa-solid fa-briefcase text-sm"></i>
-            <span>Portfólio</span>
+            <span>Casos</span>
         </button>
-        <!-- Injetado dinamicamente caso logado, se não, botão login -->
         <span id="mobile-admin-btn-container" class="flex items-center justify-center">
-            <button onclick="abrirModalLogin()" class="flex flex-col items-center gap-1 text-[10px] font-medium">
+            <button onclick="abrirModalLogin(event)" class="flex flex-col items-center gap-1 text-[10px] font-medium">
                 <i class="fa-solid fa-lock text-sm"></i>
                 <span>Admin</span>
             </button>
         </span>
     </nav>
 
-    <!-- CONTAINER MULTIPÁGINAS CENTRAL (SPA) -->
     <main class="max-w-6xl w-full mx-auto px-6 pt-24 pb-24 md:pb-16 flex-grow flex flex-col justify-center">
 
         <!-- 1. TAB: INÍCIO (HERO) -->
         <section id="view-home" class="tab-view relative flex flex-col items-center justify-center py-16 text-center">
-            <!-- Glow background -->
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-orange-500/5 rounded-full blur-[100px] pointer-events-none"></div>
 
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-brandBorder text-[10px] text-accent font-mono mb-6 uppercase tracking-wider">
                 <span class="flex h-2 w-2 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                 </span>
-                Disponível para Projetos Rápidos & Seguros
+                Provas de Defesa Ativa Prontas para Homologação
             </div>
             
             <h1 id="hero-title" class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white max-w-4xl">
-                Carregamento Rápido.<br>
-                <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">Segurança contra Invasões.</span>
+                Sistemas Corporativos.<br>
+                <span class="bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">Segurança e Desempenho de Elite.</span>
             </h1>
             
             <p id="hero-subtitle" class="text-xs sm:text-sm md:text-base text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
-                Eu não uso frameworks pesados que travam celulares antigos. Desenvolvo páginas escritas à mão, ultra-leves e com sistemas de defesa ativos.
+                Não utilizamos construtores de arrastar e soltar que travam o processamento dos dispositivos. Programamos portais comerciais corporativos sob medida com proteção de borda.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
-                <button onclick="switchTab('simulador')" class="w-full sm:w-auto bg-accent hover:bg-accent text-brandDark font-extrabold px-6 py-3.5 rounded-xl transition-all text-xs tracking-wider uppercase shadow-lg shadow-cyan-500/10">
-                    <i class="fa-solid fa-calculator mr-1.5"></i>Simular Valor na Hora
+                <button onclick="switchTab('simulador')" class="w-full sm:w-auto bg-accent hover:bg-accent text-brandDark font-extrabold px-6 py-3.5 rounded-xl transition-all text-xs tracking-wider uppercase shadow-lg shadow-orange-500/10">
+                    <i class="fa-solid fa-calculator mr-1.5"></i>Simular Valor Comercial
                 </button>
                 <a id="hero-direct-whatsapp" href="#" target="_blank" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-6 py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>Falar Conectado
+                    <i class="fa-brands fa-whatsapp text-emerald-400"></i>Iniciar Briefing Direto
                 </a>
             </div>
         </section>
@@ -263,9 +260,9 @@
         <!-- 2. TAB: SERVIÇOS -->
         <section id="view-servicos" class="tab-view hidden py-10">
             <div class="mb-12 text-center sm:text-left">
-                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">SOLUÇÕES ROBUSTAS</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Serviços de Desenvolvimento</h2>
-                <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg">Foco em construir sistemas eficientes que não travam o dispositivo do seu cliente final.</p>
+                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">CATÁLOGO CORPORATIVO</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Sistemas e Portais B2B</h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg">Foco em construir sistemas de alta conversão estruturados com formulários de triagem de engenharia.</p>
             </div>
 
             <div id="servicos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -276,21 +273,21 @@
         <!-- 3. TAB: SIMULADOR -->
         <section id="view-simulador" class="tab-view hidden py-10">
             <div class="text-center mb-10">
-                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">INVESTIMENTO TRANSPARENTE</span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Simulador de Projeto</h2>
-                <p class="text-xs text-slate-400 mt-1">Escolha os pacotes abaixo e tenha um valor exato estimado na hora.</p>
+                <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">TRANSPARÊNCIA E VALOR</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Simulador de Projeto Corporativo</h2>
+                <p class="text-xs text-slate-400 mt-1">Defina a base da sua aplicação e adicione proteções avançadas de dados para uma estimativa completa.</p>
             </div>
 
             <div class="bg-brandCard border border-brandBorder rounded-3xl p-6 sm:p-10 shadow-xl max-w-3xl mx-auto">
                 <!-- Nome do Cliente -->
                 <div class="mb-6">
-                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest font-mono">Nome ou Empresa (Opcional)</label>
-                    <input type="text" id="client-name" placeholder="Ex: Oficina Mecânica Silva" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 placeholder-slate-650 focus:outline-none focus:border-accent transition-all font-mono">
+                    <label class="block text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest font-mono">Nome da Empresa Proponente (Opcional)</label>
+                    <input type="text" id="client-name" placeholder="Ex: Pavimentações Paraná LTDA" class="w-full bg-brandDark border border-brandBorder rounded-xl py-3 px-4 text-xs text-slate-200 placeholder-slate-650 focus:outline-none focus:border-accent transition-all font-mono">
                 </div>
 
                 <!-- Etapa 1: Base -->
                 <div class="mb-6">
-                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">1. Base do Serviço</label>
+                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">1. Modelo do Portal Base</label>
                     <div id="simulador-base-container" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <!-- Gerado via Javascript dinamicamente -->
                     </div>
@@ -298,37 +295,37 @@
 
                 <!-- Etapa 2: Extras -->
                 <div class="mb-8">
-                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">2. Otimizações Extras (Opcionais)</label>
+                    <label class="block text-[10px] font-bold text-slate-400 mb-3 uppercase tracking-widest font-mono">2. Módulos de Engenharia e Defesa</label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
-                            <input type="checkbox" id="ext-seo" value="150" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
+                            <input type="checkbox" id="ext-seo" value="150" class="mt-1 rounded text-orange-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
-                                <span class="font-bold text-xs text-slate-200">Indexação SEO Profissional (+ R$ 150)</span>
-                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Configuração de tags sitemap para aparecer no Google de forma orgânica.</span>
+                                <span class="font-bold text-xs text-slate-200">Indexação SEO Google Regional (+ R$ 150)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Sitemap estruturado para o site aparecer no topo quando procurarem o seu serviço na sua região.</span>
                             </div>
                         </label>
                         
                         <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
-                            <input type="checkbox" id="ext-firewall" value="180" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
+                            <input type="checkbox" id="ext-firewall" value="180" class="mt-1 rounded text-orange-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
-                                <span class="font-bold text-xs text-slate-200">Blindagem de Firewall (+ R$ 180)</span>
-                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Filtros de input e headers de segurança ativos contra roubo de dados.</span>
+                                <span class="font-bold text-xs text-slate-200">Blindagem de Firewall Ativo (+ R$ 180)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Filtros sanitizados na entrada de formulários para proteção contra roubos de dados corporativos.</span>
                             </div>
                         </label>
 
                         <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
-                            <input type="checkbox" id="ext-speed" value="100" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
+                            <input type="checkbox" id="ext-speed" value="100" class="mt-1 rounded text-orange-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
-                                <span class="font-bold text-xs text-slate-200">Otimização Mobile Extrema (+ R$ 100)</span>
-                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Compressão de imagens e scripts diferidos para conexões 3G.</span>
+                                <span class="font-bold text-xs text-slate-200">Desempenho Extremo Mobile (+ R$ 100)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Compactação total de fotos de pós-serviço e scripts assíncronos que abrem em conexões móveis fracas.</span>
                             </div>
                         </label>
 
                         <label class="flex items-start gap-4 p-4 bg-brandDark border border-brandBorder rounded-xl cursor-pointer hover:border-accent/35 transition-all select-none">
-                            <input type="checkbox" id="ext-express" value="200" class="mt-1 rounded text-cyan-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
+                            <input type="checkbox" id="ext-express" value="200" class="mt-1 rounded text-orange-500 bg-brandDark border-slate-700 focus:ring-0" onclick="atualizarCalculo()">
                             <div>
-                                <span class="font-bold text-xs text-slate-200">Entrega Rápida 48h (+ R$ 200)</span>
-                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Designação de prioridade máxima no andamento do desenvolvimento.</span>
+                                <span class="font-bold text-xs text-slate-200">Entrega de Homologação 48h (+ R$ 200)</span>
+                                <span class="text-[10px] text-slate-500 block mt-1 leading-relaxed">Força-tarefa exclusiva na linha de código da AlphaWeb para liberação expressa da aplicação.</span>
                             </div>
                         </label>
                     </div>
@@ -337,13 +334,13 @@
                 <!-- Resultado -->
                 <div class="border-t border-brandBorder pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Investimento Previsto</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Investimento do Portal</span>
                         <div class="text-4xl md:text-5xl font-black text-accent mt-1 font-mono" id="total-val">R$ 350</div>
-                        <span class="text-[10px] text-slate-500 block mt-2">Valores limpos, sem mensalidades ou taxas ocultas.</span>
+                        <span class="text-[10px] text-slate-500 block mt-2">Valores transparentes de desenvolvimento único, livre de mensalidades.</span>
                     </div>
 
                     <button onclick="enviarOrcamentoWhatsApp()" class="w-full sm:w-auto bg-accent hover:bg-accent text-brandDark font-extrabold px-8 py-4 rounded-xl transition-all shadow-xl flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Projeto Via WhatsApp
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Briefing ao WhatsApp
                     </button>
                 </div>
             </div>
@@ -353,9 +350,9 @@
         <section id="view-portfolio" class="tab-view hidden py-10">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
                 <div>
-                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">TRABALHO REAL</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Casos de Sucesso</h2>
-                    <p class="text-xs text-slate-400 mt-1">Filtre as categorias para classificar os trabalhos executados.</p>
+                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">VITRINE OPERACIONAL</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Casos de Homologação</h2>
+                    <p class="text-xs text-slate-400 mt-1">Portfólio de engenharia focado no pós-serviço e portais corporativos complexos.</p>
                 </div>
                 
                 <!-- Abas do Filtro -->
@@ -367,31 +364,31 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="portfolio-container">
-                <!-- Projeto 1 (Web) -->
+                <!-- Case 1 (Web) -->
                 <div class="project-card bg-brandCard border border-brandBorder rounded-2xl overflow-hidden group transition-all duration-300" data-category="web">
                     <div class="bg-brandDark px-4 py-2.5 flex items-center gap-2 border-b border-brandBorder">
                         <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-500/40"></span>
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/40"></span>
-                        <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">alphaclean.com.br</div>
+                        <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">portal-pavimentacao.com.br</div>
                     </div>
                     <div class="p-6">
-                        <span class="text-[9px] font-mono font-bold text-accent bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">WEB DEVELOPMENT</span>
-                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Landing Page Alpha Clean</h3>
-                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Desenvolvimento de uma página comercial focada em conversões locais. Redução drástica do tamanho total da página de 4.2MB para apenas 320KB, abrindo instantaneamente.</p>
+                        <span class="text-[9px] font-mono font-bold text-accent bg-orange-500/5 px-2 py-0.5 rounded border border-orange-500/10">B2B APPLICATION</span>
+                        <h3 class="text-lg font-bold text-white mt-3 mb-2">Portal de Obras e Compactação de Solo</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-4">Desenvolvimento de um canal de captação estruturado para engenharia de solo e asfalto pesado. Projetado para apresentar galerias de pós-serviço de alta fidelidade e formulário técnico.</p>
                         <div class="flex items-center justify-between mt-6">
                             <div class="flex gap-2">
                                 <span class="font-mono text-[9px] text-slate-400">#Tailwind</span>
                                 <span class="font-mono text-[9px] text-slate-400">#HTML5</span>
                             </div>
-                            <button onclick="abrirDetalhesProjeto('Alpha Clean — Site focado em vendas e carregamento ultra otimizado com redução de bundle de mídia.')" class="text-xs font-bold text-slate-300 hover:text-accent transition-colors flex items-center gap-1">
+                            <button onclick="abrirDetalhesProjeto('Portal de Engenharia — Apresentação imponente com foco na aquisição de contratos públicos e privados.')" class="text-xs font-bold text-slate-300 hover:text-accent transition-colors flex items-center gap-1">
                                 Ver detalhes <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Projeto 2 (Security) -->
+                <!-- Case 2 (Security) -->
                 <div class="project-card bg-brandCard border border-brandBorder rounded-2xl overflow-hidden group transition-all duration-300" data-category="security">
                     <div class="bg-brandDark px-4 py-2.5 flex items-center gap-2 border-b border-brandBorder">
                         <span class="w-2.5 h-2.5 rounded-full bg-rose-500/40"></span>
@@ -400,7 +397,7 @@
                         <div class="bg-brandCard px-4 py-0.5 rounded text-[10px] text-slate-500 font-mono flex-grow max-w-[200px] text-center ml-2 truncate">auditoria-api.internal</div>
                     </div>
                     <div class="p-6">
-                        <span class="text-[9px] font-mono font-bold text-accent bg-cyan-500/5 px-2 py-0.5 rounded border border-cyan-500/10">SECURITY DEFENSE</span>
+                        <span class="text-[9px] font-mono font-bold text-accent bg-orange-500/5 px-2 py-0.5 rounded border border-orange-500/10">SECURITY DEFENSE</span>
                         <h3 class="text-lg font-bold text-white mt-3 mb-2">Blindagem de Painel de Clientes</h3>
                         <p class="text-slate-400 text-xs leading-relaxed mb-4">Auditoria completa em painel de clientes. Identificação de vulnerabilidades de injeção direta de dados e aplicação de filtros estritos de validação e sanitização (XSS/SQLi).</p>
                         <div class="flex items-center justify-between mt-6">
@@ -432,56 +429,56 @@
         <!-- 5. TAB: SOBRE MIM -->
         <section id="view-sobre" class="tab-view hidden py-10">
             <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
-                <div class="w-32 h-32 rounded-2xl bg-slate-900 border-2 border-accent/30 flex-shrink-0 flex items-center justify-center text-slate-300 relative shadow-inner">
-                    <i class="fa-solid fa-terminal text-4xl text-accent animate-pulse"></i>
-                    <div class="absolute -bottom-2 -right-2 bg-accent/10 text-accent text-[10px] font-mono border border-accent/20 px-1.5 py-0.5 rounded font-bold">Vitim</div>
+                <div class="w-32 h-32 rounded-2xl bg-slate-900 border-2 border-accent/30 flex-shrink-0 flex items-center justify-center text-slate-300 relative shadow-inner overflow-hidden">
+                    <!-- Exibe a logo quadrada da AlphaWeb se disponível, com fallback robusto -->
+                    <img id="about-logo-img" src="logo-alphaweb-perfil.png" onerror="this.onerror=null; this.src='https://placehold.co/150x150/101118/FF6B00?text=AlphaWeb'" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">DESENVOLVIMENTO DE ALTA VELOCIDADE</span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 mb-4 text-white">Me chamo Vitim</h2>
+                    <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase">ENGENHARIA DE CÓDIGO PURO</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 mb-4 text-white">Agência AlphaWeb</h2>
                     
                     <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
-                        Muitos programadores começam com computadores caros e acabam entregando sites pesados que travam no celular do cliente. Eu comecei estudando em uma máquina simples de **apenas 2GB de RAM**, e foi aí que aprendi o maior segredo da programação: **otimização de código extrema**.
+                        Muitas agências utilizam plataformas pesadas que criam códigos cheios de lixo virtual, deixando a página insustentável em smartphones simples. Nós da **AlphaWeb** nascemos sob a filosofia de otimização estrita de recursos de processamento.
                     </p>
                     <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6 font-light">
-                        Quando cada megabyte e cada recurso de processamento importam, você aprende a escrever código de verdade. Especializei-me em desenvolver landing pages e sites inteiramente escritos à mão com proteção ativa (WAF) que carregam instantaneamente mesmo em conexões de internet fracas.
+                        Escrevemos manualmente cada linha de código para garantir que seu site corporativo abra instantaneamente, passe total autoridade para o setor de compras de grandes indústrias e possua camadas ativas de filtragem contra ataques de injeção e sequestro de formulários.
                     </p>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-code text-accent text-xs"></i>
-                            <span class="text-xs text-slate-300 font-mono">Código Manual Puro</span>
+                            <span class="text-xs text-slate-300 font-mono">Arquitetura Limpa</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-gauge-high text-accent text-xs"></i>
-                            <span class="text-xs text-slate-300 font-mono">Alta Performance</span>
+                            <span class="text-xs text-slate-300 font-mono">Desempenho Extremo</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-shield-virus text-accent text-xs"></i>
-                            <span class="text-xs text-slate-300 font-mono">Segurança Defensiva</span>
+                            <span class="text-xs text-slate-300 font-mono">Filtros WAF de Borda</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-microchip text-accent text-xs"></i>
-                            <span class="text-xs text-slate-300 font-mono">Otimização Extrema</span>
+                            <span class="text-xs text-slate-300 font-mono">B2B Engine</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 6. TAB: SEÇÃO ADMIN (ALTAMENTE DINÂMICA - SÓ ACESSÍVEL SE LOGADO) -->
+        <!-- 6. TAB: SEÇÃO ADMIN (ALTAMENTE DINÂMICA) -->
         <section id="view-admin" class="tab-view hidden py-10">
             <div class="max-w-4xl mx-auto">
                 <div class="text-center mb-10">
                     <span class="font-mono text-[10px] text-accent font-bold tracking-widest uppercase font-mono">PAINEL DE CONTROLE MASTER</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Configurações Gerais do Sistema</h2>
-                    <p class="text-xs text-slate-400 mt-1">Gerencie a identidade, os textos, o catálogo de serviços e monitore pedidos.</p>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-1 text-white">Garantia e Gestão AlphaWeb</h2>
+                    <p class="text-xs text-slate-400 mt-1">Gerencie a identidade visual, o catálogo de soluções corporativas e acompanhe ordens de serviço (O.S.) geradas.</p>
                 </div>
 
                 <div class="bg-brandCard border border-brandBorder rounded-3xl p-6 md:p-10 shadow-2xl space-y-10">
                     <div class="flex items-center justify-between border-b border-brandBorder pb-5">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
+                            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-accent border border-orange-500/20">
                                 <i class="fa-solid fa-user-gear"></i>
                             </div>
                             <div>
@@ -501,17 +498,17 @@
                             <div>
                                 <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Cor Destaque Principal</label>
                                 <select id="edit-accent-color" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
-                                    <option value="cyan">Ciano Cyber (Padrão)</option>
+                                    <option value="orange">Laranja Neon (Padrão)</option>
+                                    <option value="cyan">Ciano Cyber</option>
                                     <option value="emerald">Verde Esmeralda</option>
-                                    <option value="orange">Laranja Neon</option>
                                     <option value="indigo">Índigo Cósmico</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-[9px] font-mono text-slate-500 uppercase mb-1">Estilo do Fundo</label>
                                 <select id="edit-bg-style" class="w-full bg-brandDark border border-brandBorder rounded-xl py-2.5 px-3 text-xs text-slate-200 focus:outline-none focus:border-accent">
-                                    <option value="solid">Preto Sólido</option>
                                     <option value="techGrid">Grade de Tecnologia</option>
+                                    <option value="solid">Preto Sólido</option>
                                     <option value="cosmicGlow">Brilho Cósmico</option>
                                 </select>
                             </div>
@@ -671,18 +668,19 @@
     <footer class="bg-brandDark py-8 px-6 border-t border-brandBorder text-xs text-slate-500 mt-auto">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div class="flex items-center gap-2">
-                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-wider" id="footer-studio-name">VITIM STUDIO</span>
+                <img id="footer-logo-img" src="logo-alphaweb-perfil.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/101118/FF6B00?text=AW'" class="w-5 h-5 rounded border border-orange-500/30 object-cover">
+                <span class="font-mono text-[10px] text-slate-400 font-bold tracking-wider" id="footer-studio-name">ALPHAWEB</span>
                 <span>© 2026. Todos os direitos reservados.</span>
             </div>
             <div class="flex gap-4">
-                <button onclick="abrirModalLogin()" class="hover:text-accent transition-colors flex items-center gap-1.5 font-bold">
+                <button onclick="abrirModalLogin(event)" class="hover:text-accent transition-colors flex items-center gap-1.5 font-bold">
                     <span class="h-1.5 w-1.5 rounded-full bg-slate-800 border border-slate-750" id="status-dot"></span> 
                     Área Privada
                 </button>
                 <span class="text-slate-800">|</span>
                 <span class="text-emerald-500/70 font-mono flex items-center gap-1.5">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    Vitim On-Line
+                    Servidor On-Line
                 </span>
             </div>
         </div>
@@ -690,46 +688,47 @@
 
     <!-- JAVASCRIPT MASTER: Controle de estado, segurança e gerenciamento multi-admin -->
     <script>
-        // BANCO DE DADOS LOCAL - SERVIÇOS PADRÃO
+        // BANCO DE DADOS LOCAL - SOLUÇÕES PADRÃO B2B
         const DEFAULT_SERVICES = [
             {
                 id: "frontend",
-                nome: "Desenvolvimento Frontend",
-                preco: 350,
-                desc: "Páginas de altíssima conversão feitas sob medida. Nada de builders pesados ou páginas que não abrem no 3G.",
+                nome: "Portais de Captação B2B",
+                preco: 300,
+                desc: "Estruturas com formulários técnicos de triagem de engenharia projetados sob medida para construtoras, pavimentadoras e transportadoras.",
                 icone: "fa-code",
-                badge: "100% Mobile-First"
+                badge: "Engenharia de Solo"
             },
             {
                 id: "security",
-                nome: "Auditoria & Cibersegurança",
+                nome: "Filtros e Defesa de borda",
                 preco: 400,
-                desc: "Análise profunda de vulnerabilidades em formulários e APIs, prevenindo roubos de sessão ativos.",
+                desc: "Análise profunda de vulnerabilidades de segurança e injeções em formulários corporativos contra roubos de dados ativos.",
                 icone: "fa-shield-halved",
-                badge: "OWASP Top 10"
+                badge: "WAF Ativo"
             },
             {
                 id: "speed",
-                nome: "Otimização de Velocidade",
+                nome: "Compactação e Velocidade",
                 preco: 200,
-                desc: "Compactação profunda e readequação de rotas de scripts para que o site abra em até 0.3 segundos.",
+                desc: "Compactação profunda e readequação de rotas de scripts para que o portal de obras carregue instantaneamente mesmo em conexões de estrada.",
                 icone: "fa-bolt",
-                badge: "Ultra Performance"
+                badge: "Pós-Serviço"
             }
         ];
 
         // BANCO DE DADOS LOCAL - ADMINS PADRÃO
         const DEFAULT_ADMINS = [
-            { user: "Vitim", pass: "Eumermo99kk" }
+            { user: "Vitim", pass: "Eumermo99kk" },
+            { user: "Alpha", pass: "AlphaWeb2026" }
         ];
 
         let state = {
-            siteBadgeBrand: "VITIM",
-            siteTextBrand: "STUDIO",
-            heroTitle: "Carregamento Rápido.<br><span class='accent-gradient bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent'>Segurança contra Invasões.</span>",
-            heroSubtitle: "Eu não uso frameworks pesados que travam celulares antigos. Desenvolvo páginas escritas à mão, ultra-leves e com sistemas de defesa ativos.",
-            whatsappNumber: "5546991338923", // WhatsApp oficial do Vitim configurado
-            accentColor: "cyan", // Opções: cyan, emerald, orange, indigo
+            siteBadgeBrand: "ALPHA",
+            siteTextBrand: "WEB",
+            heroTitle: "Sistemas Corporativos.<br><span class='accent-gradient bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent'>Segurança e Desempenho de Elite.</span>",
+            heroSubtitle: "Não utilizamos construtores de arrastar e soltar que travam o processamento dos dispositivos. Programamos portais comerciais corporativos sob medida com proteção de borda.",
+            whatsappNumber: "5546991338923", // WhatsApp oficial configurado
+            accentColor: "orange", // Opções: orange, cyan, emerald, indigo
             bgStyle: "techGrid", // Opções: solid, techGrid, cosmicGlow
             services: [...DEFAULT_SERVICES],
             admins: [...DEFAULT_ADMINS],
@@ -741,6 +740,11 @@
 
         // Tema de Cores Mapeado
         const colorsMap = {
+            orange: {
+                accent: "#FF6B00",
+                accentHover: "#E05E00",
+                accentGlow: "rgba(255, 107, 0, 0.15)"
+            },
             cyan: {
                 accent: "#06b6d4",
                 accentHover: "#0891b2",
@@ -750,11 +754,6 @@
                 accent: "#10b981",
                 accentHover: "#059669",
                 accentGlow: "rgba(16, 185, 129, 0.15)"
-            },
-            orange: {
-                accent: "#f97316",
-                accentHover: "#ea580c",
-                accentGlow: "rgba(249, 115, 22, 0.15)"
             },
             indigo: {
                 accent: "#6366f1",
@@ -802,18 +801,18 @@
             // Aplicar Título e Identidade
             document.getElementById('site-badge-brand').innerText = state.siteBadgeBrand;
             document.getElementById('site-text-brand').innerText = state.siteTextBrand;
-            document.getElementById('footer-studio-name').innerText = `${state.siteBadgeBrand} ${state.siteTextBrand}`;
-            document.getElementById('site-browser-title').innerText = `${state.siteBadgeBrand} ${state.siteTextBrand} — Soluções Web & Defesa Digital`;
+            document.getElementById('footer-studio-name').innerText = `${state.siteBadgeBrand}${state.siteTextBrand}`;
+            document.getElementById('site-browser-title').innerText = `${state.siteBadgeBrand}${state.siteTextBrand} — Soluções Web & Defesa Digital`;
             
             document.getElementById('hero-title').innerHTML = state.heroTitle;
             document.getElementById('hero-subtitle').innerText = state.heroSubtitle;
             
             // Configurar WhatsApp da Capa
             const cleanNum = state.whatsappNumber.replace(/\D/g, '');
-            document.getElementById('hero-direct-whatsapp').href = `https://wa.me/${cleanNum}?text=E%20a%C3%AD%20Vitim%2C%20tudo%20bem%3F%20Gostaria%20de%20um%20or%C3%A7amento%20de%20site.`;
+            document.getElementById('hero-direct-whatsapp').href = `https://wa.me/${cleanNum}?text=Ol%C3%A1%20AlphaWeb%2C%20gostaria%20de%20um%20briefing%20sobre%20meu%20projeto.`;
 
             // Aplicar estilo de Tema Dinâmico via CSS Injected Variables
-            const themeConfig = colorsMap[state.accentColor] || colorsMap.cyan;
+            const themeConfig = colorsMap[state.accentColor] || colorsMap.orange;
             const bgConfig = bgMap[state.bgStyle] || bgMap.techGrid;
 
             const customCss = `
@@ -833,6 +832,7 @@
                 .border-accent { border-color: var(--accent) !important; }
                 .hover\\:bg-accent:hover { background-color: var(--accent-hover) !important; }
                 .hover\\:text-accent:hover { color: var(--accent-hover) !important; }
+                .focus\\:border-accent:focus { border-color: var(--accent) !important; }
                 .accent-glow { box-shadow: 0 0 25px var(--accent-glow); }
             `;
             document.getElementById('dynamic-theme').innerHTML = customCss;
@@ -917,9 +917,9 @@
             }, 5000);
         }
 
-        function simularAtaqueFirewall() {
-            // Correção técnica crucial: barra invertida para impedir que o parser do navegador quebre o site
-            verificarSegurancaDeInput("<script>alert('Ataque Simulado pelo Usuário')<\/script>", "Simulados WAF Button");
+        function simularAtaqueFirewall(event) {
+            if (event) event.stopPropagation();
+            verificarSegurancaDeInput("<script>alert('Ataque Simulado no Portal AlphaWeb')<\/script>", "Simulador de Ataque");
             fecharMoreMenu();
         }
 
@@ -931,7 +931,7 @@
             if (!container) return;
 
             if (wafLogs.length === 0) {
-                container.innerHTML = `<div class="text-slate-500 italic">Nenhum comportamento hacker detectado nesta sessão.</div>`;
+                container.innerHTML = `<div class="text-slate-500 italic">Nenhum comportamento suspeito detectado nesta sessão.</div>`;
                 return;
             }
 
@@ -954,7 +954,7 @@
                     containerPublico.innerHTML += `
                         <div class="bg-brandCard border border-brandBorder p-6 rounded-2xl hover:border-accent/40 transition-all duration-300 flex flex-col justify-between">
                             <div>
-                                <div class="w-10 h-10 rounded-xl bg-cyan-500/5 flex items-center justify-center text-accent mb-6 border border-accent/15">
+                                <div class="w-10 h-10 rounded-xl bg-orange-500/5 flex items-center justify-center text-accent mb-6 border border-accent/15">
                                     <i class="fa-solid ${serv.icone} text-lg"></i>
                                 </div>
                                 <h3 class="text-base font-bold text-white mb-2">${serv.nome}</h3>
@@ -970,7 +970,7 @@
             }
 
             if (containerSimulador) {
-                const baseSelecionada = document.querySelector('input[name="base-service"]:checked')?.value || (state.services[0] ? state.services[0].preco : 350);
+                const baseSelecionada = document.querySelector('input[name="base-service"]:checked')?.value || (state.services[0] ? state.services[0].preco : 300);
                 containerSimulador.innerHTML = "";
                 state.services.forEach((serv, idx) => {
                     const checked = (serv.preco == baseSelecionada || (idx === 0 && !baseSelecionada)) ? "checked" : "";
@@ -1033,7 +1033,7 @@
             if (state.orders.length === 0) {
                 containerPedidos.innerHTML = `
                     <tr>
-                        <td colspan="5" class="p-4 text-center text-slate-500 italic font-mono">Nenhum pedido ou simulação recebido.</td>
+                        <td colspan="5" class="p-4 text-center text-slate-500 italic font-mono">Nenhum lead de projeto ou briefing submetido.</td>
                     </tr>
                 `;
                 return;
@@ -1053,7 +1053,7 @@
                         </td>
                         <td class="p-3 text-slate-400">
                             <span class="text-accent font-bold">${order.servico}</span>
-                            <span class="block text-[10px] text-slate-500 truncate max-w-[180px]">${order.extras.join(', ') || 'Nenhum adicional'}</span>
+                            <span class="block text-[10px] text-slate-500 truncate max-w-[180px]">${order.extras.join(', ') || 'Sem modulos extra'}</span>
                         </td>
                         <td class="p-3 text-emerald-400 font-bold">R$ ${order.total}</td>
                         <td class="p-3">
@@ -1109,11 +1109,13 @@
             showToast("Registro de O.S. removido.");
         }
 
-        // CONTROLE DOS MODAIS
-        function abrirModalLogin() {
+        // CONTROLE DOS MODAIS (Correção técnica contra fecho imediato por propagação)
+        function abrirModalLogin(event) {
+            if (event) event.stopPropagation();
             fecharMoreMenu();
             document.getElementById('login-modal').classList.remove('hidden');
-            document.getElementById('admin-user-inp').focus();
+            const userInp = document.getElementById('admin-user-inp');
+            if (userInp) userInp.focus();
         }
 
         function fecharModalLogin() {
@@ -1124,8 +1126,17 @@
             document.getElementById('admin-error-msg').classList.add('hidden');
         }
 
-        // MENU FLUTUANTE
-        function toggleMoreMenu() {
+        function fecharModalLoginSeForFora(event) {
+            // Se o clique ocorreu fora do container branco de conteúdo, fecha o modal
+            const container = document.getElementById('login-modal-content');
+            if (container && !container.contains(event.target)) {
+                fecharModalLogin();
+            }
+        }
+
+        // MENU FLUTUANTE (Correção de toggle e anti-fechamento do menu de 3 pontos)
+        function toggleMoreMenu(event) {
+            if (event) event.stopPropagation();
             document.getElementById('more-menu').classList.toggle('hidden');
         }
 
@@ -1133,7 +1144,7 @@
             document.getElementById('more-menu').classList.add('hidden');
         }
 
-        // LOGIN E LOGOUT
+        // LOGIN E LOGOUT ADMINISTRATIVO
         function processarLoginAdmin() {
             const userInp = document.getElementById('admin-user-inp').value.trim();
             const passInp = document.getElementById('admin-pass-inp').value;
@@ -1157,7 +1168,7 @@
                 state.loggedInUser = adminEncontrado.user;
                 fecharModalLogin();
                 verificarEstadoDeLoginUI();
-                showToast(`Bem-vindo, ${adminEncontrado.user}!`);
+                showToast(`Bem-vindo ao Portal AlphaWeb, ${adminEncontrado.user}!`);
                 
                 // Preencher inputs administrativos com dados locais
                 document.getElementById('edit-studio-badge').value = state.siteBadgeBrand;
@@ -1168,11 +1179,10 @@
                 document.getElementById('edit-accent-color').value = state.accentColor;
                 document.getElementById('edit-bg-style').value = state.bgStyle;
 
-                // Transitar direto para a aba administrativa desbloqueada
                 switchTab('admin');
             } else {
                 errMsg.classList.remove('hidden');
-                errMsg.innerText = "Credenciais inválidas ou acesso não autorizado.";
+                errMsg.innerText = "Credenciais inválidas ou acesso corporativo não autorizado.";
             }
         }
 
@@ -1203,7 +1213,7 @@
             } else {
                 navAdminTabContainer.innerHTML = "";
                 mobileAdminBtnContainer.innerHTML = `
-                    <button onclick="abrirModalLogin()" class="flex flex-col items-center gap-1 text-[10px] font-medium">
+                    <button onclick="abrirModalLogin(event)" class="flex flex-col items-center gap-1 text-[10px] font-medium">
                         <i class="fa-solid fa-lock text-sm"></i>
                         <span>Admin</span>
                     </button>
@@ -1222,7 +1232,7 @@
         function processarLogoutAdmin() {
             state.loggedInUser = null;
             verificarEstadoDeLoginUI();
-            showToast("Acesso administrativo encerrado.");
+            showToast("Sessão administrativa encerrada.");
             switchTab('home');
         }
 
@@ -1261,7 +1271,7 @@
             localStorage.setItem('v_studio_bg', bg);
 
             applyState();
-            showToast("Plataforma atualizada com sucesso!");
+            showToast("Identidade visual atualizada!");
         }
 
         // GERENCIAR SERVIÇOS DO CATÁLOGO
@@ -1298,7 +1308,7 @@
             document.getElementById('add-serv-desc').value = "";
 
             renderizarServicos();
-            showToast("Serviço adicionado ao catálogo!");
+            showToast("Solução adicionada ao catálogo AlphaWeb!");
         }
 
         function deletarServico(id) {
@@ -1335,7 +1345,7 @@
             document.getElementById('add-admin-pass').value = "";
 
             renderizarAdmins();
-            showToast(`Administrador "${user}" autorizado.`);
+            showToast(`Administrador "${user}" autorizado com sucesso.`);
         }
 
         function deletarAdmin(username) {
@@ -1365,7 +1375,7 @@
 
             const labelElement = baseRadio.closest('label');
             const serviceName = labelElement.querySelector('.service-title').innerText;
-            const clientName = document.getElementById('client-name').value.trim() || "Consumidor Local";
+            const clientName = document.getElementById('client-name').value.trim() || "Consumidor Corporativo";
 
             if (!verificarSegurancaDeInput(clientName, "Simulador (Nome Cliente)")) {
                 return;
@@ -1379,10 +1389,10 @@
             const speed = document.getElementById('ext-speed');
             const express = document.getElementById('ext-express');
 
-            if (seo && seo.checked) { finalValue += parseInt(seo.value); extras.push("Indexação SEO (+ R$ 150)"); }
-            if (firewall && firewall.checked) { finalValue += parseInt(firewall.value); extras.push("Blindagem de Firewall (+ R$ 180)"); }
-            if (speed && speed.checked) { finalValue += parseInt(speed.value); extras.push("Otimização Mobile Extrema (+ R$ 100)"); }
-            if (express && express.checked) { finalValue += parseInt(express.value); extras.push("Entrega Rápida 48h (+ R$ 200)"); }
+            if (seo && seo.checked) { finalValue += parseInt(seo.value); extras.push("SEO Google (+ R$ 150)"); }
+            if (firewall && firewall.checked) { finalValue += parseInt(firewall.value); extras.push("Firewall Ativo (+ R$ 180)"); }
+            if (speed && speed.checked) { finalValue += parseInt(speed.value); extras.push("Otimização Mobile (+ R$ 100)"); }
+            if (express && express.checked) { finalValue += parseInt(express.value); extras.push("Homologação 48h (+ R$ 200)"); }
 
             // Salvar automaticamente como O.S. no banco local
             const novoPedido = {
@@ -1400,22 +1410,18 @@
             renderizarPedidosAdmin();
 
             // Montar ticket no padrão O.S. profissional
-            let msg = `📋 *${state.siteBadgeBrand.toUpperCase()} ${state.siteTextBrand.toUpperCase()} — ORDEM DE SERVIÇO*\n`;
+            let msg = `📋 *${state.siteBadgeBrand.toUpperCase()} ${state.siteTextBrand.toUpperCase()} — TICKET DE TRIAGEM DE PROJETO*\n`;
             msg += `----------------------------------------\n`;
-            msg += `👤 *Cliente:* ${clientName}\n`;
-            msg += `🛠️ *Serviço Base:* ${serviceName} (R$ ${baseRadio.value})\n`;
+            msg += `👤 *Empresa/Proponente:* ${clientName}\n`;
+            msg += `🛠️ *Portal Base:* ${serviceName} (R$ ${baseRadio.value})\n`;
             if (extras.length > 0) {
                 msg += `⚡ *Adicionais:* \n   - ${extras.join('\n   - ')}\n`;
             }
             msg += `----------------------------------------\n`;
-            msg += `💰 *VALOR FINAL:* R$ ${finalValue}\n`;
-            msg += `⏱️ *PRAZO ESTIMADO:* ${express && express.checked ? '48 Horas (Prioritário)' : '4 a 6 Dias Úteis'}\n`;
+            msg += `💰 *INVESTIMENTO REAL:* R$ ${finalValue}\n`;
+            msg += `⏱️ *PRAZO DE ENTREGA:* ${express && express.checked ? '48 Horas (Prioritário)' : '4 a 6 Dias Úteis'}\n`;
             msg += `----------------------------------------\n\n`;
-            msg += `📋 *AÇÕES DO ADMINISTRADOR (VITIM):*\n`;
-            msg += `[ ] CONFIRMAR PEDIDO (Aguardar 50% Entrada)\n`;
-            msg += `[ ] FINALIZAR PROJETO\n`;
-            msg += `[ ] CANCELAR PEDIDO\n\n`;
-            msg += `Olá Vitim, realizei a simulação de orçamento e montei a minha O.S. Gostaria de iniciar o desenvolvimento e acertar a entrada!`;
+            msg += `Olá AlphaWeb, acabo de realizar a simulação técnica no seu site e montei o escopo básico do meu portal. Gostaria de iniciar o briefing e definir os métodos de entrega!`;
 
             const encodedText = encodeURIComponent(msg);
             const cleanNum = state.whatsappNumber.replace(/\D/g, '');
@@ -1472,11 +1478,15 @@
             setTimeout(() => { toast.classList.add('hidden'); }, 3500);
         }
 
-        // Fechar menus ao clicar fora
+        // Fechar menus de forma segura ao clicar fora de suas áreas correspondentes
         window.onclick = function(event) {
             const moreMenu = document.getElementById('more-menu');
-            if (!event.target.closest('#more-menu') && !event.target.closest('button[onclick="toggleMoreMenu()"]')) {
-                moreMenu.classList.add('hidden');
+            
+            // Se clicar fora do menu 3 pontos e fora do botão de gatilho, fecha o menu
+            if (moreMenu && !moreMenu.classList.contains('hidden')) {
+                if (!event.target.closest('#more-menu') && !event.target.closest('#more-menu-btn')) {
+                    moreMenu.classList.add('hidden');
+                }
             }
         }
 
